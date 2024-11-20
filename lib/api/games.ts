@@ -3,16 +3,34 @@ import { rawgClient } from './rawg'
 
 export async function searchGames(query: string) {
   try {
-    // Try IGDB first
-    const igdbResults = await igdbClient.searchGames(query)
+    // Validate API configuration
+    if (!process.env.IGDB_CLIENT_ID || !process.env.IGDB_CLIENT_SECRET) {
+      throw new Error('IGDB API configuration missing')
+    }
 
-    if (igdbResults.length > 0) {
-      return igdbResults
+    if (!process.env.RAWG_API_KEY) {
+      throw new Error('RAWG API configuration missing')
+    }
+
+    // Try IGDB first
+    try {
+      const igdbResults = await igdbClient.searchGames(query)
+      if (igdbResults.length > 0) {
+        return igdbResults
+      }
+    } catch (error) {
+      console.error('IGDB search error:', error)
     }
 
     // Fallback to RAWG
-    const rawgResults = await rawgClient.searchGames(query)
-    return rawgResults.results
+    try {
+      const rawgResults = await rawgClient.searchGames(query)
+      return rawgResults.results
+    } catch (error) {
+      console.error('RAWG search error:', error)
+    }
+
+    return []
   } catch (error) {
     console.error('Error searching games:', error)
     throw error

@@ -25,10 +25,10 @@ export default withAuth({
 
 export const config = {
   matcher: [
-    '/admin/:path*',
-    '/api/:path*',
-    '/profile/:path*',
-    '/library/:path*',
-    '/wishlist/:path*',
+    "/admin/:path*",
+    "/api/admin/:path*",
+    "/profile/:path*",
+    "/library/:path*",
+    "/wishlist/:path*"
   ],
 }
