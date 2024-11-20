@@ -2,6 +2,7 @@ import type { Metadata } from 'next'
 import localFont from 'next/font/local'
 import './globals.css'
 import Navbar from '@/components/shared/navbar'
+import AuthProvider from '@/providers/auth-provider'
 
 const inter = localFont({
   src: './fonts/Inter.ttf',
@@ -22,10 +23,12 @@ export default function RootLayout({
   return (
     <html lang="en" className="dark">
       <body className={inter.className}>
-        <main className="min-h-screen bg-bg-dark">
-          <Navbar />
-          <div className="container mx-auto px-4 py-8">{children}</div>
-        </main>
+        <AuthProvider>
+          <main className="min-h-screen bg-bg-dark">
+            <Navbar />
+            <div className="container mx-auto px-4 py-8">{children}</div>
+          </main>
+        </AuthProvider>
       </body>
     </html>
   )

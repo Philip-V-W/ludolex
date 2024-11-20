@@ -12,3 +12,185 @@ datasource db {
   provider = "postgresql"
   url      = env("DATABASE_URL")
 }
+
+// User system
+model User {
+  id        Int      @id @default(autoincrement())
+  role      Role     @default(USER)
+  username  String   @unique
+  email     String   @unique
+  password  String
+  settings  Json?
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  // Relations
+  libraries Library[]
+  wishlists Wishlist[]
+  reviews   Review[]
+
+  @@map("users")
+}
+
+// Game data cache
+model Game {
+  id                 Int       @id @default(autoincrement())
+  igdbId             Int?      @unique @map("igdb_id")
+  rawgId             Int?      @unique @map("rawg_id")
+  title              String
+  slug               String    @unique
+  description        String?   @db.Text
+  coverImage         String?   @map("cover_image")
+  backgroundImage    String?   @map("background_image")
+  releaseDate        DateTime? @map("release_date")
+  metacritic         Int?
+  ageRating          Int?      @map("age_rating")
+  supportedLanguages String[]  @map("supported_languages")
+  systemRequirements Json?     @map("system_requirements")
+  createdAt          DateTime  @default(now()) @map("created_at")
+  updatedAt          DateTime  @updatedAt @map("updated_at")
+  lastFetched        DateTime? @map("last_fetched")
+
+  // Relations
+  libraries Library[]
+  wishlists Wishlist[]
+  reviews   Review[]
+  genres    GameGenre[]
+  platforms GamePlatform[]
+  companies GameCompany[]
+
+  @@map("games")
+}
+
+// User collections
+model Library {
+  id        Int      @id @default(autoincrement())
+  userId    Int      @map("user_id")
+  gameId    Int      @map("game_id")
+  addedDate DateTime @default(now()) @map("added_date")
+
+  // Relations
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+  game Game @relation(fields: [gameId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, gameId])
+  @@map("libraries")
+}
+
+model Wishlist {
+  id        Int      @id @default(autoincrement())
+  userId    Int      @map("user_id")
+  gameId    Int      @map("game_id")
+  addedDate DateTime @default(now()) @map("added_date")
+
+  // Relations
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+  game Game @relation(fields: [gameId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, gameId])
+  @@map("wishlists")
+}
+
+// Reviews system
+model Review {
+  id        Int      @id @default(autoincrement())
+  rating    Int
+  content   String?  @db.Text
+  userId    Int      @map("user_id")
+  gameId    Int      @map("game_id")
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  // Relations
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+  game Game @relation(fields: [gameId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, gameId])
+  @@map("reviews")
+}
+
+// Companies (developers/publishers)
+model Company {
+  id   Int    @id @default(autoincrement())
+  name String
+  slug String @unique
+
+  // Relations
+  games GameCompany[]
+
+  @@map("companies")
+}
+
+model GameCompany {
+  gameId    Int         @map("game_id")
+  companyId Int         @map("company_id")
+  role      CompanyRole
+
+  // Relations
+  game    Game    @relation(fields: [gameId], references: [id], onDelete: Cascade)
+  company Company @relation(fields: [companyId], references: [id], onDelete: Cascade)
+
+  @@id([gameId, companyId, role])
+  @@map("game_companies")
+}
+
+// Reference tables
+model Genre {
+  id   Int    @id @default(autoincrement())
+  name String @unique
+  slug String @unique
+
+  // Relations
+  games GameGenre[]
+
+  @@map("genres")
+}
+
+model Platform {
+  id   Int    @id @default(autoincrement())
+  name String @unique
+  slug String @unique
+
+  // Relations
+  games GamePlatform[]
+
+  @@map("platforms")
+}
+
+// Junction tables
+model GameGenre {
+  gameId  Int @map("game_id")
+  genreId Int @map("genre_id")
+
+  // Relations
+  game  Game  @relation(fields: [gameId], references: [id], onDelete: Cascade)
+  genre Genre @relation(fields: [genreId], references: [id], onDelete: Cascade)
+
+  @@id([gameId, genreId])
+  @@map("game_genres")
+}
+
+model GamePlatform {
+  gameId     Int @map("game_id")
+  platformId Int @map("platform_id")
+
+  // Relations
+  game     Game     @relation(fields: [gameId], references: [id], onDelete: Cascade)
+  platform Platform @relation(fields: [platformId], references: [id], onDelete: Cascade)
+
+  @@id([gameId, platformId])
+  @@map("game_platforms")
+}
+
+// Enums
+enum Role {
+  USER
+  MODERATOR
+  ADMIN
+}
+
+enum CompanyRole {
+  DEVELOPER
+  PUBLISHER
+  PORT_DEVELOPER
+}
