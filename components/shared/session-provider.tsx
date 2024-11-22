@@ -7,7 +7,7 @@ export default function SessionProvider({
 }: {
   children: React.ReactNode
 }) {
-  const { data: session, status } = useSession()
+  const { status } = useSession()
 
   if (status === 'loading') {
     return <div>Loading...</div>

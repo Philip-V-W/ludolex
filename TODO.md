@@ -8,6 +8,7 @@
 
 - [ ] fix eslint errors in `types/api.ts`
 
+
 ## Future Improvements
 
 - [ ] 
@@ -21,4 +22,5 @@
 
 ## Completed
 
-- [x] 
+- [x] implement login/register
+- [x] add option to reset password

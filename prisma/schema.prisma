@@ -15,14 +15,16 @@ datasource db {
 
 // User system
 model User {
-  id        Int      @id @default(autoincrement())
-  role      Role     @default(USER)
-  username  String   @unique
-  email     String   @unique
-  password  String
-  settings  Json?
-  createdAt DateTime @default(now()) @map("created_at")
-  updatedAt DateTime @updatedAt @map("updated_at")
+  id               Int       @id @default(autoincrement())
+  role             Role      @default(USER)
+  username         String    @unique
+  email            String    @unique
+  password         String
+  resetToken       String?
+  resetTokenExpiry DateTime?
+  settings         Json?
+  createdAt        DateTime  @default(now()) @map("created_at")
+  updatedAt        DateTime  @updatedAt @map("updated_at")
 
   // Relations
   libraries Library[]
