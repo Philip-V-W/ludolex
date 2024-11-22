@@ -13,7 +13,7 @@ export async function GET(request: Request) {
         return NextResponse.json({ success: true, data: searchResults })
 
       case 'game':
-        const gameId = searchParams.get('id') || '1'
+        const gameId = Number(searchParams.get('id')) || 1879
         const game = await getGame(gameId)
         return NextResponse.json({ success: true, data: game })
 

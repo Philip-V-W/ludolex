@@ -64,3 +64,4 @@ class IGDBClient {
 }
 
 export const igdbClient = new IGDBClient()
+

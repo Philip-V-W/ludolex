@@ -17,7 +17,7 @@ export namespace IGDB {
     token_type: string
   }
 
-  export interface Game extends Game {
+  export interface Game {
     cover?: {
       id: number
       url: string
@@ -46,7 +46,7 @@ export namespace RAWG {
     results: T[]
   }
 
-  export interface Game extends Game {
+  export interface Game {
     tba: boolean
     rating_top: number
     ratings_count: number

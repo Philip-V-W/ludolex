@@ -40,9 +40,11 @@ export async function searchGames(query: string) {
 export async function getGame(identifier: string | number) {
   try {
     if (typeof identifier === 'number') {
-      return await igdbClient.getGame(identifier)
+      const game = await igdbClient.getGame(identifier)
+      console.log('IGDB Client fetched game:', game)
+      return game
     } else {
-      return await rawgClient.getGame(identifier)
+      // return await rawgClient.getGame(identifier)
     }
   } catch (error) {
     console.error('Error fetching game:', error)
