@@ -15,12 +15,12 @@ interface NavItemProps {
 }
 
 const NavItem = ({
-  href,
-  label,
-  isActive,
-  showIcon = true,
-  size = 'small',
-}: NavItemProps) => {
+                   href,
+                   label,
+                   isActive,
+                   showIcon = true,
+                   size = 'small',
+                 }: NavItemProps) => {
   const defaultIcon = `/sidebar/${label}/Property 1=Default.svg`
   const hoverIcon = `/sidebar/${label}/Property 1=Variant2.svg`
 
@@ -32,7 +32,7 @@ const NavItem = ({
 
   const positionClasses = {
     small: 'align-start pl-10',
-    medium: 'justify-start pl-3',
+    medium: 'justify-start pl-6',
     large: 'justify-start',
   }
 
@@ -46,14 +46,12 @@ const NavItem = ({
       }`}
     >
       {showIcon && (
-        <div
-          className={`relative ${size === 'large' ? 'h-5 w-5' : size === 'medium' ? 'h-4.5 w-4.5' : 'h-4 w-4'}`}
-        >
+        <div className="relative h-[24px] w-[24px]">
           <Image
             src={defaultIcon}
             alt={`${label} icon`}
-            width={size === 'large' ? 20 : size === 'medium' ? 18 : 16}
-            height={size === 'large' ? 20 : size === 'medium' ? 18 : 16}
+            width={30}
+            height={30}
             className={`absolute transition-opacity ${
               isActive ? 'opacity-0' : 'opacity-100 group-hover:opacity-0'
             }`}
@@ -61,8 +59,8 @@ const NavItem = ({
           <Image
             src={hoverIcon}
             alt={`${label} icon hover`}
-            width={size === 'large' ? 20 : size === 'medium' ? 18 : 16}
-            height={size === 'large' ? 20 : size === 'medium' ? 18 : 16}
+            width={30}
+            height={30}
             className={`absolute transition-opacity ${
               isActive ? 'opacity-100' : 'opacity-0 group-hover:opacity-100'
             }`}
@@ -75,9 +73,9 @@ const NavItem = ({
 }
 
 const NavSection = ({
-  title,
-  children,
-}: {
+                      title,
+                      children,
+                    }: {
   title?: string
   children: React.ReactNode
 }) => (
@@ -157,6 +155,7 @@ const NavContent = () => {
           label="By Release"
           isActive={pathname === '/by-release'}
           size="medium"
+          showIcon={false}
         />
         <NavItem
           href="/last-30-days"
@@ -178,6 +177,7 @@ const NavContent = () => {
           label="By Review"
           isActive={pathname === '/by-review'}
           size="medium"
+          showIcon={false}
         />
         <NavItem
           href="/popular"
@@ -199,21 +199,22 @@ const NavContent = () => {
           label="By Rating"
           isActive={pathname === '/by-rating'}
           size="medium"
+          showIcon={false}
         />
         <NavItem
-            href="/best-of-2024"
-            label="Best of 2024"
-            isActive={pathname === '/best-2024'}
+          href="/best-of-2024"
+          label="Best of 2024"
+          isActive={pathname === '/best-2024'}
         />
         <NavItem
-            href="/highest-rated"
-            label="Highest Rated"
-            isActive={pathname === '/highest-rated'}
+          href="/highest-rated"
+          label="Highest Rated"
+          isActive={pathname === '/highest-rated'}
         />
         <NavItem
-            href="/lowest-rated"
-            label="Lowest Rated"
-            isActive={pathname === '/lowest-rated'}
+          href="/lowest-rated"
+          label="Lowest Rated"
+          isActive={pathname === '/lowest-rated'}
         />
       </NavSection>
 
@@ -269,7 +270,7 @@ const NavContent = () => {
         />
       </NavSection>
 
-        {/* Browse */}
+      {/* Browse */}
       <NavSection>
         <NavItem
           href="/browse"
@@ -279,14 +280,14 @@ const NavContent = () => {
           showIcon={false}
         />
         <NavItem
-            href="/by-store"
-            label="By Store"
-            isActive={pathname === '/by-store'}
+          href="/by-store"
+          label="By Store"
+          isActive={pathname === '/by-store'}
         />
         <NavItem
-            href="/by-platform"
-            label="By Platform"
-            isActive={pathname === '/by-platform'}
+          href="/by-platform"
+          label="By Platform"
+          isActive={pathname === '/by-platform'}
         />
         <NavItem
           href="/by-tag"
@@ -299,9 +300,9 @@ const NavContent = () => {
           isActive={pathname === '/by-genre'}
         />
         <NavItem
-            href="/by-creator"
-            label="By Creator"
-            isActive={pathname === '/by-creator'}
+          href="/by-creator"
+          label="By Creator"
+          isActive={pathname === '/by-creator'}
         />
         <NavItem
           href="/by-developer"
@@ -363,9 +364,9 @@ const NavContent = () => {
           isActive={pathname === '/streams'}
         />
         <NavItem
-            href="/clips"
-            label="Clips"
-            isActive={pathname === '/clips'}
+          href="/clips"
+          label="Clips"
+          isActive={pathname === '/clips'}
         />
         <NavItem
           href="/guides"
@@ -433,7 +434,7 @@ export default function Sidebar() {
 
       {/* Desktop Sidebar - Hidden on small screens */}
       <div className="hidden lg:block lg:w-64">
-        <div className="sticky top-16 border-r border-custom-border-light bg-bg-nav px-4 py-6 rounded-xl ml-10">
+        <div className="sticky top-16 border border-bg-nav bg-bg-nav px-4 py-6 rounded-xl">
           <NavContent />
         </div>
       </div>

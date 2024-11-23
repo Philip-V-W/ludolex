@@ -25,7 +25,7 @@ export default async function RootLayout({
     <html lang="en">
       <body className={inter.className}>
         <AuthProvider>
-          <div className="min-h-screen bg-bg-dark">
+          <div className="min-h-screen bg-bg-dark px-28 lg:px-15">
             <Navbar />
             <div className="pt-16">
               <div className="mx-auto flex max-w-[1920px]">

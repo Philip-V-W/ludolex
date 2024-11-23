@@ -7,6 +7,8 @@
 ## Low Priority
 
 - [ ] fix eslint errors in `types/api.ts`
+- [ ] fix navbar alignments
+- [ ] fix sidebar alignments
 
 
 ## Future Improvements
