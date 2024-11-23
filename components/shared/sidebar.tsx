@@ -31,8 +31,8 @@ const NavItem = ({
   }
 
   const positionClasses = {
-    small: 'justify-center',
-    medium: 'justify-start pl-8',
+    small: 'align-start pl-10',
+    medium: 'justify-start pl-3',
     large: 'justify-start',
   }
 
@@ -42,7 +42,7 @@ const NavItem = ({
       className={`group flex items-center gap-3 rounded-md py-2 transition-colors ${sizeClasses[size]} ${positionClasses[size]} ${
         isActive
           ? 'bg-accent-primary text-text-primary'
-          : 'text-text-secondary hover:bg-accent-primary hover:text-text-primary'
+          : 'text-text-primary hover:bg-accent-primary hover:text-text-secondary'
       }`}
     >
       {showIcon && (
@@ -433,7 +433,7 @@ export default function Sidebar() {
 
       {/* Desktop Sidebar - Hidden on small screens */}
       <div className="hidden lg:block lg:w-64">
-        <div className="sticky top-16 border-r border-custom-border-light bg-bg-nav px-4 py-6">
+        <div className="sticky top-16 border-r border-custom-border-light bg-bg-nav px-4 py-6 rounded-xl ml-10">
           <NavContent />
         </div>
       </div>
