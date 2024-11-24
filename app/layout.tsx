@@ -4,6 +4,7 @@ import Navbar from '@/components/shared/navbar'
 import AuthProvider from '@/providers/auth-provider'
 import './globals.css'
 import Sidebar from "@/components/shared/sidebar";
+import { ScrollArea } from '@/components/ui/scroll-area'
 
 const inter = localFont({
   src: './fonts/Inter.ttf',
@@ -23,21 +24,23 @@ export default async function RootLayout({
 }) {
   return (
     <html lang="en">
-      <body className={inter.className}>
-        <AuthProvider>
-          <div className="min-h-screen bg-bg-dark px-28 lg:px-15">
-            <Navbar />
-            <div className="pt-16">
-              <div className="mx-auto flex max-w-[1920px]">
-                <Sidebar />
-                <main className="flex-1 px-4 py-6 lg:px-6 lg:py-8">
-                  {children}
-                </main>
-              </div>
+    <body className={inter.className}>
+    <AuthProvider>
+      <ScrollArea className="h-screen">
+        <div className="min-h-screen bg-bg-dark px-28 lg:px-15">
+          <Navbar />
+          <div className="pt-16">
+            <div className="mx-auto flex max-w-[1920px]">
+              <Sidebar />
+              <main className="flex-1 px-4 py-6 lg:px-6 lg:py-8">
+                {children}
+              </main>
             </div>
           </div>
-        </AuthProvider>
-      </body>
+        </div>
+      </ScrollArea>
+    </AuthProvider>
+    </body>
     </html>
   )
 }

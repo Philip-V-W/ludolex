@@ -19,7 +19,7 @@ const Navbar = () => {
   const { data: session, status } = useSession()
 
   return (
-    <nav className="fixed left-0 right-0 top-0 z-50 flex h-16 items-center bg-bg-dark px-40">
+    <nav className="fixed left-0 right-0 top-0 flex h-16 items-center bg-bg-dark px-40">
       <div className="flex w-full items-center justify-between">
         {/* Logo */}
         <Link href="/" className="flex items-center">
