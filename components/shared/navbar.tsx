@@ -31,7 +31,7 @@ const Navbar = () => {
             height={40}
             className="mr-40"
           />
-          <div className="text-2xl font-bold text-text-primary">LUDOLEX</div>
+          <div className="text-3xl text-text-primary tracking-widest">L U D O L E X</div>
         </Link>
 
         {/* Search Bar */}

@@ -5,6 +5,7 @@ import AuthProvider from '@/providers/auth-provider'
 import './globals.css'
 import Sidebar from "@/components/shared/sidebar";
 import { ScrollArea } from '@/components/ui/scroll-area'
+import Footer from '@/components/shared/footer'
 
 const inter = localFont({
   src: './fonts/Inter.ttf',
@@ -37,6 +38,7 @@ export default async function RootLayout({
               </main>
             </div>
           </div>
+          <Footer className="mt-auto" />
         </div>
       </ScrollArea>
     </AuthProvider>
