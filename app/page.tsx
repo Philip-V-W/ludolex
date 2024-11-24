@@ -1,16 +1,18 @@
 import { Metadata } from 'next'
-import EmblaCarousel, { Game } from '@/components/ui/carousel'
+import EmblaCarousel from '@/components/shared/hero-carousel'
+import CardCarousel from '@/components/shared/card-carousel'
+
 
 export const metadata: Metadata = {
   title: 'Home - LudoLex',
   description: 'Discover and explore your favorite video games',
 }
 
-const games: Game[] = [
+const heroCarouselGames = [
   {
     id: '1',
-    title: "Senua's Saga: Hellblade II",
-    description: "The sequel to the acclaimed Hellblade: Senua's Sacrifice, following the continuing journey of Senua through a dark and mythological world.",
+    title: 'Senua\'s Saga: Hellblade II',
+    description: 'The sequel to the acclaimed Hellblade: Senua\'s Sacrifice, following the continuing journey of Senua through a dark and mythological world.',
     mainImage: '/hollow_knight.jpg',
     thumbnails: [
       '/thumbnail1.jpg',
@@ -24,8 +26,8 @@ const games: Game[] = [
   },
   {
     id: '2',
-    title: "Senua's Saga: Hellblade II",
-    description: "The sequel to the acclaimed Hellblade: Senua's Sacrifice, following the continuing journey of Senua through a dark and mythological world.",
+    title: 'Senua\'s Saga: Hellblade II',
+    description: 'The sequel to the acclaimed Hellblade: Senua\'s Sacrifice, following the continuing journey of Senua through a dark and mythological world.',
     mainImage: '/hollow_knight.jpg',
     thumbnails: [
       '/thumbnail1.jpg',
@@ -39,8 +41,8 @@ const games: Game[] = [
   },
   {
     id: '3',
-    title: "Senua's Saga: Hellblade II",
-    description: "The sequel to the acclaimed Hellblade: Senua's Sacrifice, following the continuing journey of Senua through a dark and mythological world.",
+    title: 'Senua\'s Saga: Hellblade II',
+    description: 'The sequel to the acclaimed Hellblade: Senua\'s Sacrifice, following the continuing journey of Senua through a dark and mythological world.',
     mainImage: '/hollow_knight.jpg',
     thumbnails: [
       '/thumbnail1.jpg',
@@ -54,8 +56,8 @@ const games: Game[] = [
   },
   {
     id: '4',
-    title: "Senua's Saga: Hellblade II",
-    description: "The sequel to the acclaimed Hellblade: Senua's Sacrifice, following the continuing journey of Senua through a dark and mythological world.",
+    title: 'Senua\'s Saga: Hellblade II',
+    description: 'The sequel to the acclaimed Hellblade: Senua\'s Sacrifice, following the continuing journey of Senua through a dark and mythological world.',
     mainImage: '/hollow_knight.jpg',
     thumbnails: [
       '/thumbnail1.jpg',
@@ -69,19 +71,94 @@ const games: Game[] = [
   },
 ]
 
+const cardCarouselGames = [
+  {
+    id: '1',
+    title: 'Black Myth: Wu Kong',
+    image: '/card_carousel.jpg',
+    score: 92,
+    platforms: ['/ri_android-fill.svg', '/ri_apple-fill.svg', '/ri_windows-fill.svg'],
+  },
+  {
+    id: '1',
+    title: 'Black Myth: Wu Kong',
+    image: '/card_carousel.jpg',
+    score: 92,
+    platforms: ['/ri_android-fill.svg', '/ri_apple-fill.svg', '/ri_windows-fill.svg'],
+  },
+  {
+    id: '1',
+    title: 'Black Myth: Wu Kong',
+    image: '/card_carousel.jpg',
+    score: 92,
+    platforms: ['/ri_android-fill.svg', '/ri_apple-fill.svg', '/ri_windows-fill.svg'],
+  },
+  {
+    id: '1',
+    title: 'Black Myth: Wu Kong',
+    image: '/card_carousel.jpg',
+    score: 92,
+    platforms: ['/ri_android-fill.svg', '/ri_apple-fill.svg', '/ri_windows-fill.svg'],
+  },
+  {
+    id: '1',
+    title: 'Black Myth: Wu Kong',
+    image: '/card_carousel.jpg',
+    score: 92,
+    platforms: ['/ri_android-fill.svg', '/ri_apple-fill.svg', '/ri_windows-fill.svg'],
+  },
+  {
+    id: '1',
+    title: 'Black Myth: Wu Kong',
+    image: '/card_carousel.jpg',
+    score: 92,
+    platforms: ['/ri_android-fill.svg', '/ri_apple-fill.svg', '/ri_windows-fill.svg'],
+  },
+  {
+    id: '1',
+    title: 'Black Myth: Wu Kong',
+    image: '/card_carousel.jpg',
+    score: 92,
+    platforms: ['/ri_android-fill.svg', '/ri_apple-fill.svg', '/ri_windows-fill.svg'],
+  },
+]
 
 export default function Home() {
   return (
     <div>
-      <section className="space-y-2">
+      <section className="space-y-2 mb-10">
         <h1 className="pl-32 text-5xl font-semibold text-text-primary">New and Trending</h1>
         <EmblaCarousel
-          games={games}
+          games={heroCarouselGames}
           options={{
             align: 'start',
             loop: true,
           }}
         />
+      </section>
+      <section className=" px-16 space-y-2 mb-10">
+        <h1 className="pl-4 text-5xl font-semibold text-text-primary">Top Rated</h1>
+        {/*<h2 className="text-4xl font-bold text-text-primary mb-6">Top Rated</h2>*/}
+        <CardCarousel
+          games={cardCarouselGames}
+          options={{
+            align: 'start',
+            slidesToScroll: 5,
+          }}
+        />
+
+      </section>
+      <section className="space-y-2 mb-10">
+        <h1 className="pl-32 text-5xl font-semibold text-text-primary">Most Anticipated</h1>
+
+      </section>
+      <section className="space-y-2 mb-10">
+        <h1 className="pl-32 text-5xl font-semibold text-text-primary">What your Friends are Playing</h1>
+
+      </section>
+      <section className="space-y-2 mb-10">
+        <h1 className="pl-32 text-5xl font-semibold text-text-primary">Recommended Games</h1>
+
       </section>
       <section className="text-2xl font-semibold text-text-primary m-20">
         <div>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Ab, asperiores commodi cum cupiditate

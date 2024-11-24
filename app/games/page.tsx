@@ -1,8 +1,9 @@
 'use client'
 
-import EmblaCarousel, { Game } from '@/components/ui/carousel'
 
-const games: Game[] = [
+import EmblaCarousel from '@/components/shared/hero-carousel'
+
+const games = [
   {
     id: '1',
     title: 'Senua\'s Saga: Hellblade II',

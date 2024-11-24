@@ -2,7 +2,7 @@
 
 ## High Priority
 
-- [ ] 
+- [ ] fix hero carousel responsiveness
 
 ## Low Priority
 

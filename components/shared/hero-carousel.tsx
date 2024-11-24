@@ -1,136 +1,359 @@
-import React from 'react';
-import { ChevronLeft, ChevronRight, PlayCircle } from 'lucide-react';
-import { cn } from "@/lib/utils";
+'use client'
 
-interface Game {
-  id: string;
-  title: string;
-  description: string;
-  coverImage: string;
-  thumbnails?: string[];
-  platforms: string[];
-  tags: string[];
+import React, { ComponentPropsWithRef, useCallback, useEffect, useState } from 'react'
+import { EmblaCarouselType, EmblaOptionsType } from 'embla-carousel'
+import Autoplay from 'embla-carousel-autoplay'
+import useEmblaCarousel from 'embla-carousel-react'
+import { cn } from '@/lib/utils'
+import Image from 'next/image'
+
+export type Game = {
+  id: string
+  title: string
+  description: string
+  mainImage: string
+  thumbnails: string[]
+  platforms: string[]
+  genres: string[]
+  score: number
 }
 
-interface GameCarouselProps {
-  games: Game[];
-  className?: string;
+type CarouselProps = {
+  games: Game[]
+  options?: EmblaOptionsType
+  className?: string
 }
 
-const HeroCarousel = ({ games, className }: GameCarouselProps) => {
-  const [activeIndex, setActiveIndex] = React.useState(0);
+// Rectangle Indicator Button Hook
+const useDotButton = (
+  emblaApi: EmblaCarouselType | undefined,
+  onButtonClick?: (emblaApi: EmblaCarouselType) => void,
+) => {
+  const [selectedIndex, setSelectedIndex] = useState(0)
+  const [scrollSnaps, setScrollSnaps] = useState<number[]>([])
 
-  const nextSlide = () => {
-    setActiveIndex((current) => (current + 1) % games.length);
-  };
+  const onDotButtonClick = useCallback(
+    (index: number) => {
+      if (!emblaApi) return
+      emblaApi.scrollTo(index)
+      if (onButtonClick) onButtonClick(emblaApi)
+    },
+    [emblaApi, onButtonClick],
+  )
 
-  const previousSlide = () => {
-    setActiveIndex((current) => (current - 1 + games.length) % games.length);
-  };
+  const onInit = useCallback((emblaApi: EmblaCarouselType) => {
+    setScrollSnaps(emblaApi.scrollSnapList())
+  }, [])
 
-  const currentGame = games[activeIndex];
+  const onSelect = useCallback((emblaApi: EmblaCarouselType) => {
+    setSelectedIndex(emblaApi.selectedScrollSnap())
+  }, [])
+
+  useEffect(() => {
+    if (!emblaApi) return
+
+    onInit(emblaApi)
+    onSelect(emblaApi)
+    emblaApi.on('reInit', onInit).on('reInit', onSelect).on('select', onSelect)
+  }, [emblaApi, onInit, onSelect])
+
+  return {
+    selectedIndex,
+    scrollSnaps,
+    onDotButtonClick,
+  }
+}
+
+// Navigation Buttons Hook
+const usePrevNextButtons = (
+  emblaApi: EmblaCarouselType | undefined,
+  onButtonClick?: (emblaApi: EmblaCarouselType) => void,
+) => {
+  const [prevBtnDisabled, setPrevBtnDisabled] = useState(true)
+  const [nextBtnDisabled, setNextBtnDisabled] = useState(true)
+
+  const onPrevButtonClick = useCallback(() => {
+    if (!emblaApi) return
+    emblaApi.scrollPrev()
+    if (onButtonClick) onButtonClick(emblaApi)
+  }, [emblaApi, onButtonClick])
+
+  const onNextButtonClick = useCallback(() => {
+    if (!emblaApi) return
+    emblaApi.scrollNext()
+    if (onButtonClick) onButtonClick(emblaApi)
+  }, [emblaApi, onButtonClick])
+
+  const onSelect = useCallback((emblaApi: EmblaCarouselType) => {
+    setPrevBtnDisabled(!emblaApi.canScrollPrev())
+    setNextBtnDisabled(!emblaApi.canScrollNext())
+  }, [])
+
+  useEffect(() => {
+    if (!emblaApi) return
+
+    onSelect(emblaApi)
+    emblaApi.on('reInit', onSelect).on('select', onSelect)
+  }, [emblaApi, onSelect])
+
+  return {
+    prevBtnDisabled,
+    nextBtnDisabled,
+    onPrevButtonClick,
+    onNextButtonClick,
+  }
+}
+
+// Previous Button Components
+const PrevButton: React.FC<ComponentPropsWithRef<'button'>> = (props) => {
+  const { children, className, disabled, ...restProps } = props
 
   return (
-    <div className={cn("w-full relative", className)}>
-      <h1 className="text-4xl font-bold text-text-primary mb-6">New and Trending</h1>
+    <button
+      className={cn(
+        'absolute left-5 top-1/2 -translate-y-1/2 z-10',
+        'flex items-center justify-center',
+        'transition-all duration-300',
+        'hover:scale-110 hover:drop-shadow-[0_0_8px_rgba(255,255,255,0.5)]',
+        'disabled:opacity-30 disabled:hover:scale-100 disabled:hover:drop-shadow-none',
+        className,
+      )}
+      disabled={disabled}
+      type="button"
+      {...restProps}
+    >
+      <svg className="w-8 h-8 text-text-primary" viewBox="0 0 532 532">
+        <path
+          fill="currentColor"
+          d="M355.66 11.354c13.793-13.805 36.208-13.805 50.001 0 13.785 13.804 13.785 36.238 0 50.034L201.22 266l204.442 204.61c13.785 13.805 13.785 36.239 0 50.044-13.793 13.796-36.208 13.796-50.002 0a5994246.277 5994246.277 0 0 0-229.332-229.454 35.065 35.065 0 0 1-10.326-25.126c0-9.2 3.393-18.26 10.326-25.2C172.192 194.973 332.731 34.31 355.66 11.354Z"
+        />
+      </svg>
+      {children}
+    </button>
+  )
+}
 
-      <div className="relative rounded-xl overflow-hidden bg-bg-dark">
-        <div className="relative aspect-[21/9] w-full">
-          {/* Main Image */}
-          <div className="absolute inset-0 bg-gradient-to-r from-black/50 to-transparent z-10" />
-          <img
-            src={currentGame.coverImage}
-            alt={currentGame.title}
-            className="w-full h-full object-cover"
-          />
+// Next Button Components
+const NextButton: React.FC<ComponentPropsWithRef<'button'>> = (props) => {
+  const { children, className, disabled, ...restProps } = props
 
-          {/* Play Button Overlay */}
-          <div className="absolute inset-0 flex items-center justify-center z-20">
-            <PlayCircle className="w-20 h-20 text-white opacity-80 hover:opacity-100 transition-opacity cursor-pointer" />
+  return (
+    <button
+      className={cn(
+        'absolute right-5 top-1/2 -translate-y-1/2 z-10',
+        'flex items-center justify-center',
+        'transition-all duration-300',
+        'hover:scale-110 hover:drop-shadow-[0_0_8px_rgba(255,255,255,0.5)]',
+        'disabled:opacity-30 disabled:hover:scale-100 disabled:hover:drop-shadow-none',
+        className,
+      )}
+      disabled={disabled}
+      type="button"
+      {...restProps}
+    >
+      <svg className="w-8 h-8 text-text-primary" viewBox="0 0 532 532">
+        <path
+          fill="currentColor"
+          d="M176.34 520.646c-13.793 13.805-36.208 13.805-50.001 0-13.785-13.804-13.785-36.238 0-50.034L330.78 266 126.34 61.391c-13.785-13.805-13.785-36.239 0-50.044 13.793-13.796 36.208-13.796 50.002 0 22.928 22.947 206.395 206.507 229.332 229.454a35.065 35.065 0 0 1 10.326 25.126c0 9.2-3.393 18.26-10.326 25.2-45.865 45.901-206.404 206.564-229.332 229.52Z"
+        />
+      </svg>
+      {children}
+    </button>
+  )
+}
+
+// Rectangle Indicator Button Components
+const DotButton: React.FC<ComponentPropsWithRef<'button'> & { isFirst?: boolean; isLast?: boolean }> = (props) => {
+  const { children, className, isFirst, isLast, ...restProps } = props
+
+  return (
+    <button
+      className={cn(
+        'h-[8px] w-8 p-0 focus:outline-none transition-all duration-300',
+        className?.includes('--selected')
+          ? 'bg-text-primary opacity-100'
+          : 'bg-text-primary opacity-30',
+        isFirst && 'rounded-l-sm',
+        isLast && 'rounded-r-sm',
+      )}
+      type="button"
+      {...restProps}
+    >
+      {children}
+    </button>
+  )
+}
+
+const GameSlide: React.FC<{ game: Game }> = ({ game }) => {
+  const [activeImage, setActiveImage] = useState(game.mainImage)
+
+  return (
+    <div className="grid grid-cols-[1.5fr_1fr]">
+      {/* Left side - Main image/video */}
+      <div className="relative aspect-[16/9] rounded-s-3xl">
+        <Image
+          src={activeImage}
+          alt={game.title}
+          fill
+          className="object-cover"
+          priority
+        />
+        {/* Title and Platform container - positioned at bottom */}
+        <div className="absolute bottom-0 left-0 right-0 p-6">
+          <h2 className="text-2xl font-bold text-text-primary mb-2">
+            {game.title}
+          </h2>
+          {/* Platform icons */}
+          <div className="flex gap-2">
+            {game.platforms.map((platform, idx) => (
+              <Image
+                key={idx}
+                src={`/platform_icons/${platform}`}
+                alt={`Platform icon ${idx + 1}`}
+                width={24}
+                height={24}
+                className="h-5 w-5"
+              />
+            ))}
           </div>
+        </div>
+      </div>
 
-          {/* Game Info */}
-          <div className="absolute bottom-0 left-0 right-0 p-8 z-20">
-            <div className="flex gap-2 mb-2">
-              {currentGame.platforms.map((platform) => (
-                <span key={platform} className="text-text-primary text-sm">
-                  {platform}
-                </span>
-              ))}
-            </div>
+      {/* Right side - Info */
+      }
+      <div className="flex flex-col space-y-4 bg-bg-nav p-8">
+        {/* Thumbnails */}
+        <div className="grid grid-cols-2 gap-2">
+          {game.thumbnails.map((thumb, idx) => (
+            <button
+              key={idx}
+              className="relative aspect-video overflow-hidden
+                         hover:ring-2 hover:ring-text-primary transition-all"
+              onMouseEnter={() => setActiveImage(thumb)}
+              onMouseLeave={() => setActiveImage(game.mainImage)}
+            >
+              <Image
+                src={thumb}
+                alt={`${game.title} screenshot ${idx + 1}`}
+                fill
+                className="object-cover"
+              />
+            </button>
+          ))}
+        </div>
 
-            <h2 className="text-3xl font-bold text-text-primary mb-2">
-              {currentGame.title}
-            </h2>
+        {/* Description */}
+        <div>
+          <p className="mt-2 text-sm text-text-primary line-clamp-3">
+            {game.description}
+          </p>
+        </div>
 
-            <p className="text-text-secondary text-sm max-w-2xl mb-4">
-              {currentGame.description}
-            </p>
-
-            <div className="flex flex-wrap gap-2">
-              {currentGame.tags.map((tag) => (
-                <span
-                  key={tag}
-                  className="px-3 py-1 rounded-full bg-accent-primary text-text-secondary text-sm"
-                >
-                  {tag}
-                </span>
-              ))}
-            </div>
+        {/* Score Bar */}
+        <div className="space-y-1">
+          <div className="h-2 w-full rounded-full bg-accent-primary">
+            <div
+              className="h-full rounded-full bg-rating-success transition-all"
+              style={{ width: `${game.score}%` }}
+            />
           </div>
         </div>
 
-        {/* Thumbnails */}
-        {currentGame.thumbnails && (
-          <div className="absolute top-4 right-4 flex gap-2 z-30">
-            {currentGame.thumbnails.map((thumb, index) => (
-              <div
-                key={index}
-                className="w-32 h-20 rounded-md overflow-hidden border-2 border-custom-border-light"
-              >
-                <img
-                  src={thumb}
-                  alt={`${currentGame.title} screenshot ${index + 1}`}
-                  className="w-full h-full object-cover"
-                />
-              </div>
-            ))}
-          </div>
-        )}
+        {/* Genre tags */}
+        <div className="flex flex-wrap gap-2">
+          {game.genres.map((genre) => (
+            <span
+              key={genre}
+              className="rounded-full bg-accent-primary px-3 py-1 text-sm text-text-primary"
+            >
+              {genre}
+            </span>
+          ))}
+        </div>
+      </div>
+    </div>
+  )
+}
+
+// Main Carousel Component
+const EmblaCarousel: React.FC<CarouselProps> = (props) => {
+  const { games, options, className } = props
+
+  // TODO: change delay value when finished
+  const autoplayOptions = {
+    delay: 25000000,
+    rootNode: (emblaRoot: HTMLElement) => emblaRoot.parentElement,
+  }
+
+  const [emblaRef, emblaApi] = useEmblaCarousel(
+    {
+      ...options,
+      loop: true,
+    },
+    [Autoplay(autoplayOptions)],
+  )
+
+  const onNavButtonClick = useCallback((emblaApi: EmblaCarouselType) => {
+    const autoplay = emblaApi?.plugins()?.autoplay
+    if (!autoplay) return
+
+    const resetOrStop =
+      autoplay.options.stopOnInteraction === false
+        ? autoplay.reset
+        : autoplay.stop
+
+    resetOrStop()
+  }, [])
+
+  const { selectedIndex, scrollSnaps, onDotButtonClick } = useDotButton(
+    emblaApi,
+    onNavButtonClick,
+  )
+
+  const {
+    prevBtnDisabled,
+    nextBtnDisabled,
+    onPrevButtonClick,
+    onNextButtonClick,
+  } = usePrevNextButtons(emblaApi, onNavButtonClick)
+
+  return (
+    <div className={cn('relative mx-auto max-w-[1400px] px-16', className)}>
+      <div className="overflow-hidden rounded-[1.8rem]" ref={emblaRef}>
+        <div className="flex touch-pan-y -ml-4">
+          {Array.isArray(games) && games.map((game) => (
+
+            <div
+              className="min-w-0 flex-[0_0_100%] pl-4"
+              key={game.id}
+            >
+              <GameSlide game={game} />
+            </div>
+          ))}
+        </div>
       </div>
 
-      {/* Navigation Arrows */}
-      <button
-        onClick={previousSlide}
-        className="absolute left-4 top-1/2 -translate-y-1/2 z-30 p-2 rounded-full bg-bg-dark/80 text-text-primary hover:bg-bg-dark transition-colors"
-      >
-        <ChevronLeft className="w-6 h-6" />
-      </button>
+      {/* Navigation Buttons */}
+      <PrevButton onClick={onPrevButtonClick} disabled={prevBtnDisabled} />
+      <NextButton onClick={onNextButtonClick} disabled={nextBtnDisabled} />
 
-      <button
-        onClick={nextSlide}
-        className="absolute right-4 top-1/2 -translate-y-1/2 z-30 p-2 rounded-full bg-bg-dark/80 text-text-primary hover:bg-bg-dark transition-colors"
-      >
-        <ChevronRight className="w-6 h-6" />
-      </button>
-
-      {/* Dots */}
-      <div className="absolute bottom-4 left-1/2 -translate-x-1/2 flex gap-2 z-30">
-        {games.map((_, index) => (
-          <button
+      {/* Rectangle Indicators */}
+      <div className="mt-4 flex justify-center items-center gap-2">
+        {scrollSnaps.map((_, index) => (
+          <DotButton
             key={index}
+            onClick={() => onDotButtonClick(index)}
+            isFirst={index === 0}
+            isLast={index === scrollSnaps.length - 1}
             className={cn(
-              "w-2 h-2 rounded-full transition-all",
-              activeIndex === index
-                ? "bg-text-primary w-4"
-                : "bg-text-secondary"
+              'embla__dot',
+              index === selectedIndex && 'embla__dot--selected',
             )}
-            onClick={() => setActiveIndex(index)}
           />
         ))}
       </div>
     </div>
-  );
-};
+  )
+}
 
-export default HeroCarousel;
+export default EmblaCarousel
