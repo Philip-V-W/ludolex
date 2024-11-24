@@ -62,7 +62,8 @@ const usePrevNextButtons = (
 // Game Card Component
 const GameCard: React.FC<{ game: Game }> = ({ game }) => {
   return (
-    <div className="relative aspect-[3/2] overflow-hidden rounded-xl bg-bg-nav hover:scale-105 transition-transform">
+    // TODO: maybe aspect-[5/4] is better?
+    <div className="relative aspect-[4/3] overflow-hidden rounded-2xl bg-bg-nav hover:scale-105 transition-transform">
       <Image
         src={game.image}
         alt={game.title}
@@ -117,11 +118,11 @@ const CardCarousel: React.FC<CarouselProps> = (props) => {
     <div className={cn('relative mx-auto', className)}>
       {/* Carousel Container */}
       <div className="overflow-hidden" ref={emblaRef}>
-        <div className="flex gap-4">
+        <div className="flex gap-2">
           {games.map((game) => (
             <div
               key={game.id}
-              className="flex-[0_0_19%]"
+              className="flex-[0_0_19.5%]"
             >
               <GameCard game={game} />
             </div>

@@ -199,7 +199,8 @@ const GameSlide: React.FC<{ game: Game }> = ({ game }) => {
           priority
         />
         {/* Title and Platform container - positioned at bottom */}
-        <div className="absolute bottom-0 left-0 right-0 p-6">
+        <div
+          className="absolute bottom-0 left-0 right-0 p-6 bg-gradient-to-t from-black/80 via-black/40 to-transparent">
           <h2 className="text-2xl font-bold text-text-primary mb-2">
             {game.title}
           </h2>
