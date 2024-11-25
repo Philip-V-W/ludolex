@@ -2,7 +2,7 @@ import { LoginForm } from '@/features/auth/components/login-form'
 
 export default function LoginPage() {
   return (
-    <div className="container flex h-screen w-screen flex-col items-center justify-center">
+    <div className="w-full flex items-center justify-center">
       <LoginForm />
     </div>
   )

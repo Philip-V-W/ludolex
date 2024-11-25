@@ -4,19 +4,10 @@ import { useState } from 'react'
 import { useRouter, useSearchParams } from 'next/navigation'
 import Link from 'next/link'
 import { useAuth } from '../hooks/use-auth'
-import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardFooter,
-  CardHeader,
-  CardTitle,
-} from '@/components/ui/card'
-import { Label } from '@/components/ui/label'
 import { Icons } from '@/components/ui/icons'
 import { Alert, AlertDescription } from '@/components/ui/alert'
+import { cn } from '@/lib/utils'
 
 export function LoginForm() {
   const router = useRouter()
@@ -36,20 +27,14 @@ export function LoginForm() {
   }
 
   return (
-    <Card className="w-full max-w-md">
-      <CardHeader>
-        <CardTitle>Login</CardTitle>
-        <CardDescription>
-          Enter your email and password to access your account
-        </CardDescription>
-      </CardHeader>
-      <form onSubmit={handleSubmit}>
-        <CardContent className="space-y-4">
+    <div className="w-full max-w-md">
+      <h1 className="text-4xl font-bold text-text-primary mb-3 ml-5">Login</h1>
+      <div className="bg-bg-nav/60 backdrop-blur-sm rounded-lg p-8">
+        <form onSubmit={handleSubmit} className="space-y-6">
           {resetSuccess && (
-            <Alert className="bg-rating-success text-white">
+            <Alert className="bg-rating-success text-text-primary">
               <AlertDescription>
-                Password reset successful. Please sign in with your new
-                password.
+                Password reset successful. Please sign in with your new password.
               </AlertDescription>
             </Alert>
           )}
@@ -60,54 +45,78 @@ export function LoginForm() {
             </Alert>
           )}
 
-          <div className="space-y-2">
-            <Label htmlFor="email">Email</Label>
+          <div className="space-y-1">
             <Input
-              id="email"
               type="email"
-              placeholder="Enter your email"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               disabled={isLoading}
               required
+              className={cn(
+                'w-full bg-bg-dark/60 border-0',
+                'focus:ring-1 focus:ring-text-primary',
+                'placeholder:text-text-primary',
+                'h-12',
+                'text-text-primary',
+              )}
+              placeholder="Email"
             />
           </div>
-          <div className="space-y-2">
-            <div className="flex items-center justify-between">
-              <Label htmlFor="password">Password</Label>
-              <Link
-                href="/forgot-password"
-                className="text-sm text-muted-foreground hover:text-primary"
-              >
-                Forgot password?
-              </Link>
-            </div>
+
+          <div className="space-y-1">
             <Input
-              id="password"
               type="password"
-              placeholder="Enter your password"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               disabled={isLoading}
               required
+              className={cn(
+                'w-full bg-bg-dark/60 border-0',
+                'focus:ring-1 focus:ring-text-primary',
+                'placeholder:text-text-primary',
+                'h-12',
+                'text-text-primary',
+              )}
+              placeholder="Password"
             />
           </div>
-        </CardContent>
-        <CardFooter className="flex flex-col space-y-4">
-          <Button type="submit" className="w-full" disabled={isLoading}>
-            {isLoading && (
-              <Icons.spinner className="mr-2 h-4 w-4 animate-spin" />
+
+          <button
+            type="submit"
+            disabled={isLoading}
+            className={cn(
+              'w-full h-12 rounded-md',
+              'bg-gradient-to-r from-[#06BFFF] to-[#2D73FF]',
+              'text-text-primary font-medium',
+              'transition-all duration-200',
+              'hover:brightness-110',
+              'disabled:opacity-50 disabled:cursor-not-allowed',
             )}
-            Sign In
-          </Button>
-          <p className="text-sm text-muted-foreground">
-            Don't have an account?{' '}
-            <Link href="/register" className="text-primary hover:underline">
-              Register
+          >
+            {isLoading ? (
+              <Icons.spinner className="h-5 w-5 animate-spin mx-auto" />
+            ) : (
+              'Sign In'
+            )}
+          </button>
+
+          <div className="space-y-4 text-center">
+            <Link
+              href="/register"
+              className="block text-text-secondary hover:text-text-primary transition-colors"
+            >
+              New to Ludolex? Register
             </Link>
-          </p>
-        </CardFooter>
-      </form>
-    </Card>
+
+            <Link
+              href="/forgot-password"
+              className="block text-text-secondary hover:text-text-primary transition-colors"
+            >
+              Forgot your password?
+            </Link>
+          </div>
+        </form>
+      </div>
+    </div>
   )
 }

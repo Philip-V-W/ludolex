@@ -9,6 +9,7 @@
 - [ ] fix eslint errors in `types/api.ts`
 - [ ] fix navbar alignments
 - [ ] fix sidebar alignments
+- [ ] might need to adjust the responsiveness of the auth pages for mobile
 
 
 ## Future Improvements

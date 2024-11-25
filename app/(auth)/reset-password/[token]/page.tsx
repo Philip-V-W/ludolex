@@ -6,7 +6,7 @@ export default function ResetPasswordPage({
   params: { token: string }
 }) {
   return (
-    <div className="container flex h-screen w-screen flex-col items-center justify-center">
+    <div className="w-full flex items-center justify-center">
       <ResetPasswordForm token={params.token} />
     </div>
   )

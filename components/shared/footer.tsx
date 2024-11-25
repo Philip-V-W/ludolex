@@ -7,11 +7,18 @@ import { cn } from '@/lib/utils'
 
 interface FooterProps {
   className?: string;
+  variant?: 'default' | 'transparent';
 }
 
-const Footer = ({ className }: FooterProps) => {
+const Footer = ({ className, variant = 'default' }: FooterProps) => {
   return (
-    <footer className={cn('w-full bg-bg-dark py-8', className)}>
+    <footer
+      className={cn(
+        'w-full py-8',
+        variant === 'default' ? 'bg-bg-dark' : 'bg-transparent',
+        className,
+      )}
+    >
       <div className="max-w-[1920px] mx-auto flex flex-col items-center gap-3">
 
         {/* Logo */}

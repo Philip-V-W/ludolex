@@ -2,19 +2,10 @@
 
 import { useState } from 'react'
 import Link from 'next/link'
-import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardFooter,
-  CardHeader,
-  CardTitle,
-} from '@/components/ui/card'
-import { Label } from '@/components/ui/label'
 import { Icons } from '@/components/ui/icons'
 import { Alert, AlertDescription } from '@/components/ui/alert'
+import { cn } from '@/lib/utils'
 
 export function ForgotPasswordForm() {
   const [email, setEmail] = useState('')
@@ -50,55 +41,69 @@ export function ForgotPasswordForm() {
   }
 
   return (
-    <Card className="w-full max-w-md">
-      <CardHeader>
-        <CardTitle>Reset Password</CardTitle>
-        <CardDescription>
-          Enter your email address and we'll send you a link to reset your
-          password
-        </CardDescription>
-      </CardHeader>
-      <form onSubmit={handleSubmit}>
-        <CardContent className="space-y-4">
+    <div className="w-full max-w-md">
+      <h1 className="text-4xl font-bold text-text-primary mb-3 ml-5">Reset</h1>
+      <div className="bg-bg-nav/60 backdrop-blur-sm rounded-lg p-8">
+        <form onSubmit={handleSubmit} className="space-y-6">
           {error && (
             <Alert variant="destructive">
               <AlertDescription>{error}</AlertDescription>
             </Alert>
           )}
           {message && (
-            <Alert className="bg-rating-success text-white">
+            <Alert className="bg-rating-success text-text-primary">
               <AlertDescription>{message}</AlertDescription>
             </Alert>
           )}
 
-          <div className="space-y-2">
-            <Label htmlFor="email">Email</Label>
+          <div className="space-y-1">
+            <label className="block text-text-primary">Email</label>
             <Input
               type="email"
-              id="email"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
-              placeholder="Enter your email"
               disabled={isLoading}
               required
+              className={cn(
+                'w-full bg-bg-dark/60 border-0',
+                'focus:ring-1 focus:ring-text-primary',
+                'placeholder:text-text-primary',
+                'h-12',
+                'text-text-primary',
+              )}
+              placeholder="Enter your email"
             />
           </div>
-        </CardContent>
-        <CardFooter className="flex flex-col space-y-4">
-          <Button type="submit" className="w-full" disabled={isLoading}>
-            {isLoading && (
-              <Icons.spinner className="mr-2 h-4 w-4 animate-spin" />
+
+          <button
+            type="submit"
+            disabled={isLoading}
+            className={cn(
+              "w-full h-12 rounded-md",
+              'bg-gradient-to-r from-[#06BFFF] to-[#2D73FF]',
+              "text-text-primary font-medium",
+              "transition-all duration-200",
+              "hover:brightness-110",
+              "disabled:opacity-50 disabled:cursor-not-allowed"
             )}
-            Send Reset Link
-          </Button>
-          <p className="text-sm text-muted-foreground">
-            Remember your password?{' '}
-            <Link href="/login" className="text-primary hover:underline">
-              Sign in
+          >
+            {isLoading ? (
+              <Icons.spinner className="h-5 w-5 animate-spin mx-auto" />
+            ) : (
+              'Send Reset Link'
+            )}
+          </button>
+
+          <div className="space-y-4 text-center">
+            <Link
+              href="/login"
+              className="block text-text-secondary hover:text-text-primary transition-colors"
+            >
+              Remember your password? Sign in
             </Link>
-          </p>
-        </CardFooter>
-      </form>
-    </Card>
+          </div>
+        </form>
+      </div>
+    </div>
   )
 }

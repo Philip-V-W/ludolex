@@ -2,6 +2,10 @@
 
 import { useState } from 'react'
 import { useRouter } from 'next/navigation'
+import { Input } from '@/components/ui/input'
+import { Icons } from '@/components/ui/icons'
+import { Alert, AlertDescription } from '@/components/ui/alert'
+import { cn } from '@/lib/utils'
 
 export function ResetPasswordForm({ token }: { token: string }) {
   const router = useRouter()
@@ -42,56 +46,74 @@ export function ResetPasswordForm({ token }: { token: string }) {
   }
 
   return (
-    <div className="w-full max-w-md space-y-4">
-      <div className="text-center">
-        <h1 className="text-2xl font-bold">Reset Your Password</h1>
-        <p className="text-text-muted">Please enter your new password</p>
-      </div>
+    <div className="w-full max-w-md">
+      <h1 className="text-4xl font-bold text-text-primary mb-3 ml-5">New Password</h1>
+      <div className="bg-bg-nav/60 backdrop-blur-sm rounded-lg p-8">
+        <form onSubmit={handleSubmit} className="space-y-6">
+          {error && (
+            <Alert variant="destructive">
+              <AlertDescription>{error}</AlertDescription>
+            </Alert>
+          )}
 
-      <form onSubmit={handleSubmit} className="space-y-4">
-        {error && <div className="text-sm text-destructive">{error}</div>}
+          <div className="space-y-1">
+            <label className="block text-text-primary">New Password</label>
+            <Input
+              type="password"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              disabled={isLoading}
+              required
+              className={cn(
+                'w-full bg-bg-dark/60 border-0',
+                'focus:ring-1 focus:ring-text-primary',
+                'placeholder:text-text-primary',
+                'h-12',
+                'text-text-primary',
+              )}
+              placeholder="Enter new password"
+            />
+          </div>
 
-        <div>
-          <label htmlFor="password" className="block text-sm font-medium">
-            New Password
-          </label>
-          <input
-            type="password"
-            id="password"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            className="mt-1 w-full rounded-md border border-custom-border-light bg-bg-dark p-2"
+          <div className="space-y-1">
+            <label className="block text-text-primary">Confirm Password</label>
+            <Input
+              type="password"
+              value={confirmPassword}
+              onChange={(e) => setConfirmPassword(e.target.value)}
+              disabled={isLoading}
+              required
+              className={cn(
+                'w-full bg-bg-dark/60 border-0',
+                'focus:ring-1 focus:ring-text-primary',
+                'placeholder:text-text-primary',
+                'h-12',
+                'text-text-primary',
+              )}
+              placeholder="Confirm new password"
+            />
+          </div>
+
+          <button
+            type="submit"
             disabled={isLoading}
-            required
-          />
-        </div>
-
-        <div>
-          <label
-            htmlFor="confirmPassword"
-            className="block text-sm font-medium"
+            className={cn(
+              "w-full h-12 rounded-md",
+              'bg-gradient-to-r from-[#06BFFF] to-[#2D73FF]',
+              "text-text-primary font-medium",
+              "transition-all duration-200",
+              "hover:brightness-110",
+              "disabled:opacity-50 disabled:cursor-not-allowed"
+            )}
           >
-            Confirm Password
-          </label>
-          <input
-            type="password"
-            id="confirmPassword"
-            value={confirmPassword}
-            onChange={(e) => setConfirmPassword(e.target.value)}
-            className="mt-1 w-full rounded-md border border-custom-border-light bg-bg-dark p-2"
-            disabled={isLoading}
-            required
-          />
-        </div>
-
-        <button
-          type="submit"
-          className="w-full rounded-md bg-accent-primary p-2 text-white hover:bg-accent-secondary disabled:opacity-50"
-          disabled={isLoading}
-        >
-          {isLoading ? 'Resetting...' : 'Reset Password'}
-        </button>
-      </form>
+            {isLoading ? (
+              <Icons.spinner className="h-5 w-5 animate-spin mx-auto" />
+            ) : (
+              'Reset Password'
+            )}
+          </button>
+        </form>
+      </div>
     </div>
   )
 }
