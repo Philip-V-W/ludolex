@@ -3,6 +3,7 @@
 ## High Priority
 
 - [ ] fix hero carousel responsiveness
+- [ ] fix auth routes to not be accessible when logged in
 
 ## Low Priority
 

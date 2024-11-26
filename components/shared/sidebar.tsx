@@ -25,9 +25,9 @@ const NavItem = ({
   const hoverIcon = `/sidebar/${label}/Property 1=Variant2.svg`
 
   const sizeClasses = {
-    small: 'text-sm px-3',
-    medium: 'text-base px-4',
-    large: 'text-lg px-2',
+    small: 'fluid-max-16 px-3 tracking-1.24',
+    medium: 'fluid-max-20 px-4 font-semibold tracking-1.24',
+    large: 'fluid-max-26 px-2 font-bold tracking-1.24',
   }
 
   const positionClasses = {
@@ -43,10 +43,10 @@ const NavItem = ({
         isActive
           ? 'bg-accent-primary text-text-primary'
           : 'text-text-primary hover:bg-accent-primary hover:text-text-secondary'
-      }`}
+      } break-words min-w-0 w-full`}
     >
       {showIcon && (
-        <div className="relative h-[24px] w-[24px]">
+        <div className="relative h-[24px] w-[24px] flex-shrink-0">
           <Image
             src={defaultIcon}
             alt={`${label} icon`}
@@ -67,7 +67,7 @@ const NavItem = ({
           />
         </div>
       )}
-      <span>{label}</span>
+      <span className="truncate">{label}</span>
     </Link>
   )
 }
@@ -81,7 +81,7 @@ const NavSection = ({
 }) => (
   <div className="space-y-1">
     {title && (
-      <h2 className="mb-2 px-3 text-sm font-semibold uppercase text-text-muted">
+      <h2 className="mb-2 px-3 fluid-max-16 font-semibold uppercase text-text-muted">
         {title}
       </h2>
     )}
@@ -93,7 +93,7 @@ const NavContent = () => {
   const pathname = usePathname()
 
   return (
-    <nav className="space-y-6">
+    <nav className="space-y-1">
       {/* Main Navigation */}
       <NavSection>
         <NavItem
@@ -418,7 +418,7 @@ export default function Sidebar() {
             <button className="rounded-md bg-accent-primary p-2 text-text-primary hover:bg-accent-secondary">
               <div className="h-6 w-6">
                 <Image
-                  src="/sidebar/menu/Property 1=Default.svg"
+                  src="/sidebar/burger-menu.svg"
                   alt="Menu"
                   width={24}
                   height={24}
@@ -426,14 +426,14 @@ export default function Sidebar() {
               </div>
             </button>
           </SheetTrigger>
-          <SheetContent side="left" className="w-64 bg-bg-nav p-6">
+          <SheetContent side="left" className="w-auto min-w-[16rem] max-w-[20rem] bg-bg-nav p-6">
             <NavContent />
           </SheetContent>
         </Sheet>
       </div>
 
       {/* Desktop Sidebar - Hidden on small screens */}
-      <div className="hidden lg:block lg:w-64">
+      <div className="hidden lg:block lg:w-auto lg:min-w-[16rem] lg:max-w-[20rem]">
         <div className="sticky top-16 border border-bg-nav bg-bg-nav px-4 py-6 rounded-xl">
           <NavContent />
         </div>

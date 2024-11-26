@@ -2,6 +2,7 @@ import { Metadata } from 'next'
 import EmblaCarousel from '@/components/shared/hero-carousel'
 import CardCarousel from '@/components/shared/card-carousel'
 import GameGrid from '@/components/shared/game-card-grid'
+// import EmblaCarousel from '@/components/shared/EmblaCarousel'
 
 
 export const metadata: Metadata = {
@@ -316,16 +317,273 @@ const cardGridGames = [
     score: 95,
     hasVideo: true,
   },
+  {
+    id: '1',
+    title: 'Elden Ring',
+    image: '/elden-ring.jpg',
+    releaseDate: '05/08/2019',
+    platforms: ['/ri_android-fill', '/ri_apple-fill', '/ri_windows-fill'],
+    score: 95,
+    hasVideo: true,
+  },
+  {
+    id: '1',
+    title: 'Elden Ring',
+    image: '/elden-ring.jpg',
+    releaseDate: '05/08/2019',
+    platforms: ['/ri_android-fill', '/ri_apple-fill', '/ri_windows-fill'],
+    score: 95,
+    hasVideo: true,
+  },
+  {
+    id: '1',
+    title: 'Elden Ring',
+    image: '/elden-ring.jpg',
+    releaseDate: '05/08/2019',
+    platforms: ['/ri_android-fill', '/ri_apple-fill', '/ri_windows-fill'],
+    score: 95,
+    hasVideo: true,
+  },
+  {
+    id: '1',
+    title: 'Elden Ring',
+    image: '/elden-ring.jpg',
+    releaseDate: '05/08/2019',
+    platforms: ['/ri_android-fill', '/ri_apple-fill', '/ri_windows-fill'],
+    score: 95,
+    hasVideo: true,
+  },
+  {
+    id: '1',
+    title: 'Elden Ring',
+    image: '/elden-ring.jpg',
+    releaseDate: '05/08/2019',
+    platforms: ['/ri_android-fill', '/ri_apple-fill', '/ri_windows-fill'],
+    score: 95,
+    hasVideo: true,
+  },
+  {
+    id: '1',
+    title: 'Elden Ring',
+    image: '/elden-ring.jpg',
+    releaseDate: '05/08/2019',
+    platforms: ['/ri_android-fill', '/ri_apple-fill', '/ri_windows-fill'],
+    score: 95,
+    hasVideo: true,
+  },
+  {
+    id: '1',
+    title: 'Elden Ring',
+    image: '/elden-ring.jpg',
+    releaseDate: '05/08/2019',
+    platforms: ['/ri_android-fill', '/ri_apple-fill', '/ri_windows-fill'],
+    score: 95,
+    hasVideo: true,
+  },
+  {
+    id: '1',
+    title: 'Elden Ring',
+    image: '/elden-ring.jpg',
+    releaseDate: '05/08/2019',
+    platforms: ['/ri_android-fill', '/ri_apple-fill', '/ri_windows-fill'],
+    score: 95,
+    hasVideo: true,
+  },
+  {
+    id: '1',
+    title: 'Elden Ring',
+    image: '/elden-ring.jpg',
+    releaseDate: '05/08/2019',
+    platforms: ['/ri_android-fill', '/ri_apple-fill', '/ri_windows-fill'],
+    score: 95,
+    hasVideo: true,
+  },
+  {
+    id: '1',
+    title: 'Elden Ring',
+    image: '/elden-ring.jpg',
+    releaseDate: '05/08/2019',
+    platforms: ['/ri_android-fill', '/ri_apple-fill', '/ri_windows-fill'],
+    score: 95,
+    hasVideo: true,
+  },
+  {
+    id: '1',
+    title: 'Elden Ring',
+    image: '/elden-ring.jpg',
+    releaseDate: '05/08/2019',
+    platforms: ['/ri_android-fill', '/ri_apple-fill', '/ri_windows-fill'],
+    score: 95,
+    hasVideo: true,
+  },
+  {
+    id: '1',
+    title: 'Elden Ring',
+    image: '/elden-ring.jpg',
+    releaseDate: '05/08/2019',
+    platforms: ['/ri_android-fill', '/ri_apple-fill', '/ri_windows-fill'],
+    score: 95,
+    hasVideo: true,
+  },
+  {
+    id: '1',
+    title: 'Elden Ring',
+    image: '/elden-ring.jpg',
+    releaseDate: '05/08/2019',
+    platforms: ['/ri_android-fill', '/ri_apple-fill', '/ri_windows-fill'],
+    score: 95,
+    hasVideo: true,
+  },
+  {
+    id: '1',
+    title: 'Elden Ring',
+    image: '/elden-ring.jpg',
+    releaseDate: '05/08/2019',
+    platforms: ['/ri_android-fill', '/ri_apple-fill', '/ri_windows-fill'],
+    score: 95,
+    hasVideo: true,
+  },
+  {
+    id: '1',
+    title: 'Elden Ring',
+    image: '/elden-ring.jpg',
+    releaseDate: '05/08/2019',
+    platforms: ['/ri_android-fill', '/ri_apple-fill', '/ri_windows-fill'],
+    score: 95,
+    hasVideo: true,
+  },
+  {
+    id: '1',
+    title: 'Elden Ring',
+    image: '/elden-ring.jpg',
+    releaseDate: '05/08/2019',
+    platforms: ['/ri_android-fill', '/ri_apple-fill', '/ri_windows-fill'],
+    score: 95,
+    hasVideo: true,
+  },
+
+  {
+    id: '1',
+    title: 'Elden Ring',
+    image: '/elden-ring.jpg',
+    releaseDate: '05/08/2019',
+    platforms: ['/ri_android-fill', '/ri_apple-fill', '/ri_windows-fill'],
+    score: 95,
+    hasVideo: true,
+  },
+  {
+    id: '1',
+    title: 'Elden Ring',
+    image: '/elden-ring.jpg',
+    releaseDate: '05/08/2019',
+    platforms: ['/ri_android-fill', '/ri_apple-fill', '/ri_windows-fill'],
+    score: 95,
+    hasVideo: true,
+  },
+  {
+    id: '1',
+    title: 'Elden Ring',
+    image: '/elden-ring.jpg',
+    releaseDate: '05/08/2019',
+    platforms: ['/ri_android-fill', '/ri_apple-fill', '/ri_windows-fill'],
+    score: 95,
+    hasVideo: true,
+  },
+  {
+    id: '1',
+    title: 'Elden Ring',
+    image: '/elden-ring.jpg',
+    releaseDate: '05/08/2019',
+    platforms: ['/ri_android-fill', '/ri_apple-fill', '/ri_windows-fill'],
+    score: 95,
+    hasVideo: true,
+  },
+  {
+    id: '1',
+    title: 'Elden Ring',
+    image: '/elden-ring.jpg',
+    releaseDate: '05/08/2019',
+    platforms: ['/ri_android-fill', '/ri_apple-fill', '/ri_windows-fill'],
+    score: 95,
+    hasVideo: true,
+  },
+  {
+    id: '1',
+    title: 'Elden Ring',
+    image: '/elden-ring.jpg',
+    releaseDate: '05/08/2019',
+    platforms: ['/ri_android-fill', '/ri_apple-fill', '/ri_windows-fill'],
+    score: 95,
+    hasVideo: true,
+  },
+  {
+    id: '1',
+    title: 'Elden Ring',
+    image: '/elden-ring.jpg',
+    releaseDate: '05/08/2019',
+    platforms: ['/ri_android-fill', '/ri_apple-fill', '/ri_windows-fill'],
+    score: 95,
+    hasVideo: true,
+  },
+  {
+    id: '1',
+    title: 'Elden Ring',
+    image: '/elden-ring.jpg',
+    releaseDate: '05/08/2019',
+    platforms: ['/ri_android-fill', '/ri_apple-fill', '/ri_windows-fill'],
+    score: 95,
+    hasVideo: true,
+  },
+  {
+    id: '1',
+    title: 'Elden Ring',
+    image: '/elden-ring.jpg',
+    releaseDate: '05/08/2019',
+    platforms: ['/ri_android-fill', '/ri_apple-fill', '/ri_windows-fill'],
+    score: 95,
+    hasVideo: true,
+  },
+  {
+    id: '1',
+    title: 'Elden Ring',
+    image: '/elden-ring.jpg',
+    releaseDate: '05/08/2019',
+    platforms: ['/ri_android-fill', '/ri_apple-fill', '/ri_windows-fill'],
+    score: 95,
+    hasVideo: true,
+  },
+  {
+    id: '1',
+    title: 'Elden Ring',
+    image: '/elden-ring.jpg',
+    releaseDate: '05/08/2019',
+    platforms: ['/ri_android-fill', '/ri_apple-fill', '/ri_windows-fill'],
+    score: 95,
+    hasVideo: true,
+  },
+  {
+    id: '1',
+    title: 'Elden Ring',
+    image: '/elden-ring.jpg',
+    releaseDate: '05/08/2019',
+    platforms: ['/ri_android-fill', '/ri_apple-fill', '/ri_windows-fill'],
+    score: 95,
+    hasVideo: true,
+  },
+
+
 
 
 ]
 
 export default function Home() {
   return (
-    <div>
-      {/* Hero Carousel */}
-      <section className="space-y-2 mb-10">
-        <h1 className="pl-32 text-5xl font-semibold text-text-primary">New and Trending</h1>
+    <div className="min-w-0">
+      <section className="relative w-full min-w-0 max-w-[1920px]">
+        <h1
+          className="fluid-max-48 text-text-primary font-semibold line-clamp-2 mb-2">
+          New and Trending
+        </h1>
         <EmblaCarousel
           games={heroCarouselGames}
           options={{
@@ -335,9 +593,11 @@ export default function Home() {
         />
       </section>
       {/* Card Carousels */}
-      <section className="px-16 space-y-2 mb-10">
-        <h1 className="pl-4 text-5xl font-semibold text-text-primary">Top Rated</h1>
-        {/*<h2 className="text-4xl font-bold text-text-primary mb-6">Top Rated</h2>*/}
+      <section className="relative w-full min-w-0 max-w-[1920px]">
+        <h1
+          className="fluid-max-48 text-text-primary font-semibold line-clamp-2 mb-2">
+          Top Rated
+        </h1>
         <CardCarousel
           games={cardCarouselGames}
           options={{
@@ -346,8 +606,10 @@ export default function Home() {
           }}
         />
       </section>
-      <section className="px-16 space-y-2 mb-10">
-        <h1 className="pl-4 text-5xl font-semibold text-text-primary">Most Anticipated</h1>
+      <section className="relative w-full min-w-0 max-w-[1920px]">
+        <h1
+          className="fluid-max-48 text-text-primary font-semibold line-clamp-2 mb-2">
+          Most Anticipated</h1>
         {/*<h2 className="text-4xl font-bold text-text-primary mb-6">Top Rated</h2>*/}
         <CardCarousel
           games={cardCarouselGames2}
@@ -357,8 +619,10 @@ export default function Home() {
           }}
         />
       </section>
-      <section className="px-16 space-y-2 mb-10">
-        <h1 className="pl-4 text-5xl font-semibold text-text-primary">What your Friends are Playing</h1>
+      <section className="relative w-full min-w-0 max-w-[1920px]">
+        <h1
+          className="fluid-max-48 text-text-primary font-semibold line-clamp-2 mb-2">
+          What your Friends are Playing</h1>
         {/*<h2 className="text-4xl font-bold text-text-primary mb-6">Top Rated</h2>*/}
         <CardCarousel
           games={cardCarouselGames2}
@@ -369,7 +633,7 @@ export default function Home() {
         />
       </section>
       {/* Generic Cards */}
-      <section className="px-16">
+      <section className="relative w-full min-w-0 max-w-[1920px]">
         {/*<h1 className="pl-4 text-5xl font-semibold text-text-primary">Recommended Games</h1>*/}
         {/*<h2 className="text-4xl font-bold text-text-primary mb-6">Top Rated</h2>*/}
         <GameGrid
