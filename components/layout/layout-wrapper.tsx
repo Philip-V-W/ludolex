@@ -28,10 +28,10 @@ export default function LayoutWrapper({
     <ScrollArea className="h-screen">
       <div className="min-h-screen bg-bg-dark">
         <Navbar />
-        <div className="pt-16">
+        <div className="pt-20">
           <div className="flex w-full gap-[8%] px-[8%]">
             <Sidebar />
-            <main className="flex-1 min-w-0 py-[2%]">
+            <main className="flex-1 min-w-0">
               <div className="w-full min-w-0">
                 {children}
               </div>

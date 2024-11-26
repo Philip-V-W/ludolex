@@ -579,9 +579,9 @@ const cardGridGames = [
 export default function Home() {
   return (
     <div className="min-w-0">
-      <section className="relative w-full min-w-0 max-w-[1920px]">
+      <section className="relative w-full min-w-0 max-w-[1920px] mt-[-1%]">
         <h1
-          className="fluid-max-48 text-text-primary font-semibold line-clamp-2 mb-2">
+          className="fluid-max-48 text-text-primary font-semibold line-clamp-2">
           New and Trending
         </h1>
         <EmblaCarousel
@@ -595,7 +595,7 @@ export default function Home() {
       {/* Card Carousels */}
       <section className="relative w-full min-w-0 max-w-[1920px]">
         <h1
-          className="fluid-max-48 text-text-primary font-semibold line-clamp-2 mb-2">
+          className="fluid-max-48 text-text-primary font-semibold line-clamp-2">
           Top Rated
         </h1>
         <CardCarousel
@@ -608,7 +608,7 @@ export default function Home() {
       </section>
       <section className="relative w-full min-w-0 max-w-[1920px]">
         <h1
-          className="fluid-max-48 text-text-primary font-semibold line-clamp-2 mb-2">
+          className="fluid-max-48 text-text-primary font-semibold line-clamp-2">
           Most Anticipated</h1>
         {/*<h2 className="text-4xl font-bold text-text-primary mb-6">Top Rated</h2>*/}
         <CardCarousel
@@ -621,7 +621,7 @@ export default function Home() {
       </section>
       <section className="relative w-full min-w-0 max-w-[1920px]">
         <h1
-          className="fluid-max-48 text-text-primary font-semibold line-clamp-2 mb-2">
+          className="fluid-max-48 text-text-primary font-semibold line-clamp-2">
           What your Friends are Playing</h1>
         {/*<h2 className="text-4xl font-bold text-text-primary mb-6">Top Rated</h2>*/}
         <CardCarousel

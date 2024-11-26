@@ -20,6 +20,7 @@ const fluidType = plugin(({ matchUtilities, theme }) => {
         'max-16': '0.875_1',       // Scales from 14px to 16px sidebar__text
         'max-20': '1_1.25',        // Scales from 16px to 20px sidebar__semibold__text
         'max-26': '1.25_1.625',    // Scales from 20px to 26px sidebar__bold__text
+        'max-32': '1.5_2',        // Scales from 24px to 32px title__text
         'max-48': '1.875_3',       // Scales from 30px to 48px title__text__bold
       }
     }

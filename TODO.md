@@ -15,7 +15,7 @@
 
 ## Future Improvements
 
-- [ ] 
+- [ ] add notifications
 
 ## Notes
 
