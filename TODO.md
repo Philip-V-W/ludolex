@@ -11,6 +11,7 @@
 - [ ] fix navbar alignments
 - [ ] fix sidebar alignments
 - [ ] might need to adjust the responsiveness of the auth pages for mobile
+- [ ] DotButton component view scaling needs improvement
 
 
 ## Future Improvements

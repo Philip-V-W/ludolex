@@ -16,12 +16,13 @@ const fluidType = plugin(({ matchUtilities, theme }) => {
     },
     {
       values: {
-        'max-14': '0.75_0.875',    // Scales from 12px to 14px rating__bubble__text
-        'max-16': '0.875_1',       // Scales from 14px to 16px sidebar__text
-        'max-20': '1_1.25',        // Scales from 16px to 20px sidebar__semibold__text
-        'max-26': '1.25_1.625',    // Scales from 20px to 26px sidebar__bold__text
-        'max-32': '1.5_2',        // Scales from 24px to 32px title__text
-        'max-48': '1.875_3',       // Scales from 30px to 48px title__text__bold
+        'max-12': '0.375_0.75',    // Scales from 10px to 12px genre__text
+        'max-14': '0.4375_0.875',    // Scales from 12px to 14px rating__bubble__text
+        'max-16': '0.5_1',       // Scales from 14px to 16px sidebar__text
+        'max-20': '0.625_1.25',        // Scales from 16px to 20px sidebar__semibold__text
+        'max-26': '0.8125_1.625',    // Scales from 20px to 26px sidebar__bold__text
+        'max-32': '1_2',        // Scales from 24px to 32px title__text
+        'max-48': '1.5_3',       // Scales from 30px to 48px title__text__bold
       }
     }
   )
@@ -153,6 +154,10 @@ const config = {
         DEFAULT: '#2D3544',
       },
       borderRadius: {
+        '7xl': '96px',
+        '6xl': '64px',
+        '5xl': '48px',
+        '4xl': '32px',
         lg: 'var(--radius)',
         md: 'calc(var(--radius) - 2px)',
         sm: 'calc(var(--radius) - 4px)',
