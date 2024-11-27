@@ -8,10 +8,10 @@
 ## Low Priority
 
 - [ ] fix eslint errors in `types/api.ts`
-- [ ] fix navbar alignments
-- [ ] fix sidebar alignments
 - [ ] might need to adjust the responsiveness of the auth pages for mobile
 - [ ] DotButton component view scaling needs improvement
+- [ ] navbar alignment needs improvement
+- [ ] card carousel game cards leave a slight gap when you slide them
 
 
 ## Future Improvements
@@ -29,3 +29,4 @@
 
 - [x] implement login/register
 - [x] add option to reset password
+- [x] fix sidebar alignments
