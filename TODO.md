@@ -12,6 +12,7 @@
 - [ ] DotButton component view scaling needs improvement
 - [ ] navbar alignment needs improvement
 - [ ] card carousel game cards leave a slight gap when you slide them
+- [ ] game card grid margin bottom needs adjustment
 
 
 ## Future Improvements

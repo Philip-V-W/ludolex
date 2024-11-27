@@ -30,7 +30,7 @@ const GameCard = ({
   return (
     <div
       className={cn(
-        'group relative w-full overflow-hidden rounded-lg bg-bg-nav',
+        'group relative w-full overflow-hidden rounded-lg sm:rounded-xl md:rounded-1xl lg:rounded-2xl bg-bg-nav mb-[5%]',
         'transition-transform flex flex-col',
         className,
       )}
@@ -47,38 +47,38 @@ const GameCard = ({
       </div>
 
       {/* Content Section */}
-      <div className="flex flex-col flex-1 p-3"> {/* Added flex-1 */}
-        <div className="flex justify-between mb-auto"> {/* Changed to flex and added mb-auto */}
-          <div className="space-y-2">
+      <div className="flex flex-col flex-1 p-[7%]">
+        <div className="flex justify-between mb-auto">
+          <div className="space-y-[4%]">
             {/* Platform Icons */}
-            <div className="flex gap-2">
+            <div className="flex gap-[4%]">
               {platforms.map((platform, idx) => (
-                <Image
-                  key={idx}
-                  src={`/platform_icons/${platform}.svg`}
-                  alt={platform}
-                  width={16}
-                  height={16}
-                  className="h-4 w-4"
-                />
+                <div key={idx} className="w-[9%] aspect-square relative">
+                  <Image
+                    src={`/platform_icons/${platform}.svg`}
+                    alt={platform}
+                    fill
+                    className="object-contain"
+                  />
+                </div>
               ))}
             </div>
 
             {/* Title */}
-            <h3 className="text-lg font-semibold text-text-primary leading-tight">
+            <h3 className="fluid-max-20 font-semibold text-text-primary leading-tight">
               {title}
             </h3>
 
             {/* Release Date */}
-            <p className="text-sm text-text-primary">
+            <p className="fluid-max-14 text-text-primary">
               Release Date: {releaseDate}
             </p>
           </div>
 
           {/* Buttons */}
-          <div className="flex flex-col items-end">
+          <div className="flex flex-col items-end gap-[8%]">
             <button
-              className="transition-colors"
+              className="transition-colors w-[24%] aspect-square relative"
               onMouseEnter={() => setIsLibraryHovered(true)}
               onMouseLeave={() => setIsLibraryHovered(false)}
             >
@@ -88,13 +88,12 @@ const GameCard = ({
                   : '/sidebar/My Library/Property 1=Default.svg'
                 }
                 alt="Add to Library"
-                width={24}
-                height={24}
-                className="h-6 w-6"
+                fill
+                className="object-contain"
               />
             </button>
             <button
-              className="transition-colors mt-2"
+              className="transition-colors w-[24%] aspect-square relative"
               onMouseEnter={() => setIsWishlistHovered(true)}
               onMouseLeave={() => setIsWishlistHovered(false)}
             >
@@ -104,9 +103,8 @@ const GameCard = ({
                   : '/sidebar/Wishlist/Property 1=Default.svg'
                 }
                 alt="Add to Wishlist"
-                width={24}
-                height={24}
-                className="h-6 w-6"
+                fill
+                className="object-contain"
               />
             </button>
           </div>
@@ -114,7 +112,7 @@ const GameCard = ({
 
         {/* Score Bar */}
         {score && (
-          <div className="h-1 w-full overflow-hidden rounded-full bg-accent-primary mt-3">
+          <div className="h-[0.4cqw] w-full overflow-hidden rounded-full bg-accent-primary mt-[4%]">
             <div
               className={cn(
                 'h-full transition-all',

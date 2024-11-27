@@ -1,4 +1,4 @@
-"use client"
+'use client'
 
 import React from 'react'
 import { cn } from '@/lib/utils'
@@ -22,24 +22,35 @@ type GameGridProps = {
 
 const GameGrid = ({ title, games, className }: GameGridProps) => {
   return (
-    <div className={cn("space-y-2", className)}>
-      <h1 className="pl-4 text-5xl font-semibold text-text-primary">
+    <div className={cn(
+      'w-[100%] max-w-[1920px] mx-auto relative',
+      className,
+    )} style={{ minWidth: '0' }}>
+      <h1 className="fluid-max-48 text-text-primary font-semibold pl-[2%]">
         {title}
       </h1>
 
-      {/* This is the responsive grid layout */}
-      {/*<div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 2xl:grid-cols-6 gap-4">*/}
-      <div className="grid grid-cols-4 gap-4">
+      <div className="flex flex-wrap gap-[1.5%]" style={{ minWidth: '0' }}>
         {games.map((game) => (
-          <GameCard
+          <div
             key={game.id}
-            {...game}
-            className="w-full"
-          />
+            className={cn(
+              'w-[48.25%]',
+              'sm:w-[31.83%]',
+              'lg:w-[23.875%]',
+              'transition-all duration-300',
+            )}
+            style={{ minWidth: '0' }}
+          >
+            <GameCard
+              {...game}
+              className="w-full"
+            />
+          </div>
         ))}
       </div>
     </div>
-  );
-};
+  )
+}
 
 export default GameGrid
