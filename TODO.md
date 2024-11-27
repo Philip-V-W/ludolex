@@ -2,8 +2,8 @@
 
 ## High Priority
 
-- [ ] fix hero carousel responsiveness
 - [ ] fix auth routes to not be accessible when logged in
+- [ ] fix folder structure
 
 ## Low Priority
 
@@ -13,7 +13,8 @@
 - [ ] navbar alignment needs improvement
 - [ ] card carousel game cards leave a slight gap when you slide them
 - [ ] game card grid margin bottom needs adjustment
-
+- [ ] missing drop shadows on all the card components
+- [ ] sidebar scaling is a bit off at around 1024px
 
 ## Future Improvements
 
@@ -31,3 +32,4 @@
 - [x] implement login/register
 - [x] add option to reset password
 - [x] fix sidebar alignments
+- [x] fix hero carousel responsiveness
