@@ -27,9 +27,9 @@ export function RegisterForm() {
   }
 
   return (
-    <div className="w-full max-w-md">
-      <h1 className="text-4xl font-bold text-text-primary mb-3 ml-5">Register</h1>
-      <div className="bg-bg-nav/60 backdrop-blur-sm rounded-lg p-8">
+    <div className="w-[90%] sm:w-[80%] md:w-[60%] lg:w-[40%] xl:w-[30%] max-w-[480px]">
+      <h1 className="fluid-max-48 font-bold text-text-primary mb-[3%] ml-[5%]">Register</h1>
+      <div className="bg-bg-nav/60 backdrop-blur-sm rounded-3xl p-[8%]">
         <form onSubmit={handleSubmit} className="space-y-6">
           {error && (
             <Alert variant="destructive">

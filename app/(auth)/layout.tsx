@@ -30,16 +30,20 @@ export default function AuthLayout({
 
       {/* Header Section */}
       <header className="container py-8">
-        <Link href="/" className="flex items-center">
-          <Image
-            src="/ludolex_logo.svg"
-            alt="LUDOLEX Logo"
-            width={40}
-            height={40}
-            className="mr-40"
-          />
-          <div className="text-3xl text-text-primary tracking-widest">
-            L U D O L E X
+        <Link href="/" className="flex items-center px-[8%]">
+          <div className="flex w-72 items-center justify-between">
+            <div className="w-10">
+              <Image
+                src="/ludolex_logo.svg"
+                alt="LUDOLEX Logo"
+                width={40}
+                height={40}
+                className="object-contain"
+              />
+            </div>
+            <div className="fluid-max-32 font-semibold tracking-widest text-text-primary whitespace-nowrap">
+              L U D O L E X
+            </div>
           </div>
         </Link>
       </header>
