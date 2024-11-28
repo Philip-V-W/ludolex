@@ -1,5 +1,6 @@
-import type { IGDBGame, RAWGGame, TransformedGame, SystemRequirements, ExtendedGameData } from '../types'
+import type { IGDBGame, RAWGGame } from '../types'
 import { TopRated } from '@/components/shared/card-carousel'
+import { ExtendedGameData, TransformedGame } from '@/features/games/types/api/games'
 
 export function transformIGDBGame(game: IGDBGame): TransformedGame {
   return {

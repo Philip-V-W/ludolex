@@ -49,6 +49,7 @@ model Game {
   videoPreview       String?   @map("video_preview") // video thumbnail
   releaseDate        DateTime? @map("release_date")
   metacritic         Int?
+  rating             Float?    @map("rating")
   ageRating          Int?      @map("age_rating")
   supportedLanguages String[]  @map("supported_languages")
   systemRequirements Json?     @map("system_requirements")

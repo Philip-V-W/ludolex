@@ -4,7 +4,7 @@ import React, { useState } from 'react'
 import Image from 'next/image'
 import { cn } from '@/lib/utils'
 
-type GameCardProps = {
+export type RecommendedGame = {
   id: string
   title: string
   image: string
@@ -23,7 +23,7 @@ const GameCard = ({
                     score,
                     hasVideo = false,
                     className,
-                  }: GameCardProps) => {
+                  }: RecommendedGame) => {
   const [isLibraryHovered, setIsLibraryHovered] = useState(false)
   const [isWishlistHovered, setIsWishlistHovered] = useState(false)
 

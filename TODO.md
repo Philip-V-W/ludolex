@@ -3,7 +3,8 @@
 ## High Priority
 
 - [ ] fix auth routes to not be accessible when logged in
-- [ ] fix folder structure
+- [ ] change metacritic rating to user rating
+
 
 ## Low Priority
 
@@ -16,6 +17,8 @@
 - [ ] missing drop shadows on all the card components
 - [ ] sidebar scaling is a bit off at around 1024px
 - [ ] fix getTrendingGames, function is fetching the wrong data
+- [ ] adjust the horizontal scrollbar in the GameMediaSection component
+- [ ] fix the GameMediaCarousel drag scroll
 
 ## Future Improvements
 
@@ -36,3 +39,4 @@
 - [x] add option to reset password
 - [x] fix sidebar alignments
 - [x] fix hero carousel responsiveness
+- [x] fix folder structure

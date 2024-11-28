@@ -2,21 +2,11 @@
 
 import React from 'react'
 import { cn } from '@/lib/utils'
-import GameCard from '@/components/shared/game-card'
-
-type Game = {
-  id: string
-  title: string
-  image: string
-  releaseDate: string
-  platforms: string[]
-  score?: number
-  hasVideo?: boolean
-}
+import GameCard, { RecommendedGame } from '@/components/shared/game-card'
 
 type GameGridProps = {
   title: string
-  games: Game[]
+  games: RecommendedGame[]
   className?: string
 }
 

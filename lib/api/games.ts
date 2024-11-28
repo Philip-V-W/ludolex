@@ -178,3 +178,39 @@ export async function getMostAnticipatedGames(): Promise<ExtendedGameData[]> {
     return []
   }
 }
+
+export async function getRecommendedGames(): Promise<ExtendedGameData[]> {
+  try {
+    const response = await rawgClient.fetch<RAWGResponse<RAWGGame>>('games', {
+      metacritic: '80,100',
+      ordering: '-metacritic,-rating,-added',
+      platforms: '1,2,3,4,5,6,7,8,14,80,83,169,186,187',
+      page_size: '40',
+      dates: '2000-01-01,2024-12-31',
+    })
+
+    if (!response?.results?.length) {
+      return []
+    }
+
+    const gamesWithDetails = await Promise.all(
+      response.results.map(async game => {
+        try {
+          const details = await rawgClient.fetch<RAWGGame>(`games/${game.id}`)
+          return transformRAWGGame({
+            ...game,
+            ...details,
+          })
+        } catch (error) {
+          console.error(`Error fetching details for game ${game.slug}:`, error)
+          return transformRAWGGame(game)
+        }
+      }),
+    )
+
+    return gamesWithDetails.filter(Boolean)
+  } catch (error) {
+    console.error('Error fetching recommended games:', error)
+    return []
+  }
+}

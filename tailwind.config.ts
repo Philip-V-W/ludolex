@@ -8,7 +8,7 @@ const fluidType = plugin(({ matchUtilities, theme }) => {
   matchUtilities(
     {
       'fluid': (value) => {
-        const [min, max] = value.split('_').map(Number)
+        const [min, max] = value.split('_').map(Number) as [number, number]
         return {
           fontSize: `clamp(${min}rem, ${(min + (max - min) * 0.5)}vw, ${max}rem)`
         }

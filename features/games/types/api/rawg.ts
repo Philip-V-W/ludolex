@@ -17,7 +17,7 @@ export interface RAWGGame {
   description?: string
   released: string
   background_image: string | null
-  rating: number
+  rating: number | null
   metacritic: number | null
   short_screenshots?: {
     id: number
