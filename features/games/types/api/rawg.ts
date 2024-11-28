@@ -31,17 +31,3 @@ export interface RAWGGame {
     slug: string
   }[]
 }
-
-// export interface TransformedGame {
-//   id: string
-//   title: string
-//   description: string
-//   mainImage: string
-//   thumbnails: string[]
-//   platforms: {
-//     name: string
-//     slug: string
-//   }[]
-//   genres: string[]
-//   score: number
-// }

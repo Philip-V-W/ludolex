@@ -5,17 +5,18 @@ import { EmblaCarouselType, EmblaOptionsType } from 'embla-carousel'
 import useEmblaCarousel from 'embla-carousel-react'
 import { cn } from '@/lib/utils'
 import Image from 'next/image'
+import { getPlatformIconSlug, PlatformInfo } from '@/features/games/utils/platforms'
 
-type Game = {
+export type TopRated = {
   id: string
   title: string
-  image: string
+  mainImage: string
   score: number
-  platforms: string[]
+  platforms: PlatformInfo[]
 }
 
 type CarouselProps = {
-  games: Game[]
+  games: TopRated[]
   options?: EmblaOptionsType
   className?: string
 }
@@ -61,11 +62,12 @@ const usePrevNextButtons = (
 }
 
 // Game Card Component
-const GameCard: React.FC<{ game: Game }> = ({ game }) => {
+const GameCard: React.FC<{ game: TopRated }> = ({ game }) => {
   return (
-    <div className="relative aspect-[4/3] overflow-hidden rounded-lg sm:rounded-xl md:rounded-1xl lg:rounded-2xl bg-bg-nav hover:scale-105 transition-transform">
+    <div
+      className="relative aspect-[4/3] overflow-hidden rounded-lg sm:rounded-xl md:rounded-1xl lg:rounded-2xl bg-bg-nav hover:scale-105 transition-transform">
       <Image
-        src={game.image}
+        src={game.mainImage || '/placeholder.png'}
         alt={game.title}
         fill
         className="object-cover"
@@ -79,10 +81,11 @@ const GameCard: React.FC<{ game: Game }> = ({ game }) => {
           {game.platforms.map((platform, idx) => (
             <div key={idx} className="w-[6%] aspect-square relative">
               <Image
-                src={`/platform_icons/${platform}`}
-                alt={platform}
+                src={`/platform_icons/${getPlatformIconSlug(platform.name)}.svg`}
+                alt={platform.name}
                 fill
                 className="object-contain"
+                unoptimized
               />
             </div>
           ))}
@@ -90,13 +93,13 @@ const GameCard: React.FC<{ game: Game }> = ({ game }) => {
       </div>
 
       {/* Score */}
-      <div className="absolute bottom-[5%] right-[5%] bg-rating-success rounded-full w-[12%] aspect-square flex items-center justify-center">
+      <div
+        className="absolute bottom-[5%] right-[5%] bg-rating-success rounded-full w-[12%] aspect-square flex items-center justify-center">
         <span className="fluid-max-14 font-medium text-text-primary">{game.score}</span>
       </div>
     </div>
   )
 }
-
 // Main Carousel Component
 const CardCarousel: React.FC<CarouselProps> = (props) => {
   const { games, options, className } = props
@@ -120,7 +123,8 @@ const CardCarousel: React.FC<CarouselProps> = (props) => {
       className,
     )} style={{ minWidth: '0' }}>
       {/* Carousel Container */}
-      <div className="overflow-hidden rounded-lg sm:rounded-xl md:rounded-1xl lg:rounded-2xl w-full" style={{ minWidth: '0' }} ref={emblaRef}>
+      <div className="overflow-hidden rounded-lg sm:rounded-xl md:rounded-1xl lg:rounded-2xl w-full"
+           style={{ minWidth: '0' }} ref={emblaRef}>
         <div className="flex gap-[1%]" style={{ minWidth: '0' }}>
           {games.map((game) => (
             <div

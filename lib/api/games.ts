@@ -1,6 +1,6 @@
 import { igdbClient } from './igdb'
 import { rawgClient } from './rawg'
-import type { TransformedGame, IGDBGame, RAWGGame, RAWGResponse } from '@/features/games/types'
+import { IGDBGame, RAWGGame, RAWGResponse, TransformedGame } from '@/features/games/types'
 import { transformIGDBGame, transformRAWGGame } from '@/features/games/utils/transformers'
 
 export async function searchGames(query: string): Promise<TransformedGame[]> {
@@ -71,19 +71,15 @@ export async function getTrendingGames(): Promise<TransformedGame[]> {
     const gamesWithDetails = await Promise.all(
       response.results.map(async game => {
         try {
-          // Get game details
           const details = await rawgClient.fetch<RAWGGame>(`games/${game.id}`)
 
-          // Get screenshots separately
           const screenshots = await rawgClient.fetch<{ results: { image: string }[] }>(
             `games/${game.id}/screenshots`,
           )
 
-          // Transform the game with screenshots
           return transformRAWGGame({
             ...game,
             description: details.description || game.description,
-            // Use screenshots from the dedicated endpoint
             short_screenshots: screenshots.results?.map(s => ({
               id: 0,
               image: s.image,
@@ -99,6 +95,76 @@ export async function getTrendingGames(): Promise<TransformedGame[]> {
     return gamesWithDetails.filter(Boolean)
   } catch (error) {
     console.error('Error fetching trending games:', error)
+    return []
+  }
+}
+
+export async function getTopRatedGames(): Promise<TransformedGame[]> {
+  try {
+    const response = await rawgClient.fetch<RAWGResponse<RAWGGame>>('games', {
+      ordering: '-metacritic',
+      page_size: '20',
+      metacritic: '90,100',
+    })
+
+    if (!response?.results?.length) {
+      return []
+    }
+
+    const gamesWithDetails = await Promise.all(
+      response.results.map(async game => {
+        try {
+          const details = await rawgClient.fetch<RAWGGame>(`games/${game.id}`)
+          return transformRAWGGame({
+            ...game,
+            ...details,
+          })
+        } catch (error) {
+          console.error(`Error fetching details for game ${game.slug}:`, error)
+          return transformRAWGGame(game)
+        }
+      }),
+    )
+
+    return gamesWithDetails.filter(Boolean)
+  } catch (error) {
+    console.error('Error fetching top rated games:', error)
+    return []
+  }
+}
+
+export async function getMostAnticipatedGames(): Promise<TransformedGame[]> {
+  try {
+    const today = new Date().toISOString().split('T')[0]
+
+    const response = await rawgClient.fetch<RAWGResponse<RAWGGame>>('games', {
+      dates: `${today},2030-01-01`,
+      ordering: 'released',
+      page_size: '20',
+    })
+
+    if (!response?.results?.length) {
+      return []
+    }
+
+    const gamesWithDetails = await Promise.all(
+      response.results.map(async game => {
+        try {
+          const details = await rawgClient.fetch<RAWGGame>(`games/${game.id}`)
+          return transformRAWGGame({
+            ...game,
+            ...details,
+          })
+        } catch (error) {
+          console.error(`Error fetching details for game ${game.slug}:`, error)
+          return transformRAWGGame(game)
+        }
+      }),
+    )
+
+    return gamesWithDetails.filter(Boolean)
+  } catch (error) {
+    console.error('Error fetching most anticipated games:', error)
     return []
   }
 }

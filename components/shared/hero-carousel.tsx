@@ -7,23 +7,7 @@ import useEmblaCarousel from 'embla-carousel-react'
 import { cn } from '@/lib/utils'
 import Image from 'next/image'
 import { decodeHTMLEntities } from '@/lib/utils/textHelpers'
-
-// TODO: place these in the correct location and add more platforms
-export const PLATFORM_SLUG_MAP: Record<string, string> = {
-  'PlayStation 5': 'playstation5',
-  'PlayStation 4': 'playstation4',
-  'Xbox One': 'xbox-one',
-  'Xbox Series S/X': 'xbox-series-x',
-  'PC': 'pc',
-  'Nintendo Switch': 'nintendo-switch',
-  'iOS': 'ios',
-  'Android': 'android',
-}
-
-export type PlatformInfo = {
-  name: string;
-  slug: string;
-}
+import { getPlatformIconSlug, PlatformInfo } from '@/features/games/utils/platforms'
 
 export type CarouselGame = {
   id: string
@@ -40,10 +24,6 @@ type CarouselProps = {
   games: CarouselGame[]
   options?: EmblaOptionsType
   className?: string
-}
-
-export function getPlatformIconSlug(platformName: string): string {
-  return PLATFORM_SLUG_MAP[platformName]
 }
 
 // Previous Button Component

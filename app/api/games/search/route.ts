@@ -1,6 +1,6 @@
 import { NextResponse } from 'next/server'
 import { searchGames } from '@/lib/api/games'
-import { cacheGame } from '@/lib/api/cache'
+import { cacheGame } from '@/lib/api/services/cache'
 
 export async function GET(request: Request) {
   const { searchParams } = new URL(request.url)

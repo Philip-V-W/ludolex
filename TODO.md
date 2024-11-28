@@ -20,6 +20,7 @@
 
 - [ ] add notifications
 - [ ] implement NSFW filter
+- [ ] get more platform icons
 
 ## Notes
 

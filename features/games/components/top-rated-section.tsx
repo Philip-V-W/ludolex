@@ -1,22 +1,21 @@
 'use client'
 
 import { useEffect, useState } from 'react'
-import EmblaCarousel from '@/components/shared/hero-carousel'
-import type { CarouselGame } from '@/components/shared/hero-carousel'
+import CardCarousel, { TopRated } from '@/components/shared/card-carousel'
 
-export default function TrendingSection() {
-  const [trendingGames, setTrendingGames] = useState<CarouselGame[]>([])
+export default function TopRatedSection() {
+  const [topRatedGames, setTopRatedGames] = useState<TopRated[]>([])
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
 
   useEffect(() => {
-    const fetchTrendingGames = async () => {
+    const fetchTopRatedGames = async () => {
       try {
-        const response = await fetch('/api/games/trending')
+        const response = await fetch('/api/games/top-rated')
         const result = await response.json()
 
         if (result.success && result.data) {
-          setTrendingGames(result.data)
+          setTopRatedGames(result.data)
         } else {
           setError(result.error || 'Failed to load games')
         }
@@ -28,22 +27,22 @@ export default function TrendingSection() {
       }
     }
 
-    fetchTrendingGames()
+    fetchTopRatedGames()
   }, [])
 
   if (loading) return <div>Loading...</div>
   if (error) return <div>Error: {error}</div>
 
   return (
-    <section className="relative w-full min-w-0 max-w-[1920px] mt-[-1%]">
-      <h1 className="fluid-max-48 text-text-primary font-semibold pl-[5%]">
-        New and Trending
+    <section className="relative w-full min-w-0 max-w-[1920px] mt-[3%]">
+      <h1 className="fluid-max-48 text-text-primary font-semibold pl-[2%]">
+        Top Rated
       </h1>
-      <EmblaCarousel
-        games={trendingGames}
+      <CardCarousel
+        games={topRatedGames}
         options={{
-          align: 'start',
-          loop: true,
+          align: 'center',
+          slidesToScroll: 5,
         }}
       />
     </section>
