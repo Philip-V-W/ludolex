@@ -139,9 +139,9 @@ const CardCarousel: React.FC<CarouselProps> = (props) => {
         onClick={onPrevButtonClick}
         disabled={prevBtnDisabled}
         className={cn(
-          'absolute top-1/2 -translate-y-1/2 z-10 left-[-3.5%]',
+          'absolute top-1/2 -translate-y-1/2 z-10 left-[-2.5%]',
           'flex items-center justify-center',
-          'transition-all duration-300 w-[3.5%] aspect-square',
+          'transition-all duration-300 w-[2.5%] aspect-square',
           'hover:scale-110 hover:drop-shadow-[0_0_8px_rgba(255,255,255,0.5)]',
           'disabled:opacity-30 disabled:hover:scale-100 disabled:hover:drop-shadow-none',
         )}
@@ -157,9 +157,9 @@ const CardCarousel: React.FC<CarouselProps> = (props) => {
         onClick={onNextButtonClick}
         disabled={nextBtnDisabled}
         className={cn(
-          'absolute top-1/2 -translate-y-1/2 z-10 right-[-3.5%]',
+          'absolute top-1/2 -translate-y-1/2 z-10 right-[-2.5%]',
           'flex items-center justify-center',
-          'transition-all duration-300 w-[3.5%] aspect-square',
+          'transition-all duration-300 w-[2.5%] aspect-square',
           'hover:scale-110 hover:drop-shadow-[0_0_8px_rgba(255,255,255,0.5)]',
           'disabled:opacity-30 disabled:hover:scale-100 disabled:hover:drop-shadow-none',
         )}

@@ -1,13 +1,8 @@
-import { RAWG } from '@/types/api'
-
 class RAWGClient {
   private baseUrl = process.env.RAWG_BASE_URL
   private apiKey = process.env.RAWG_API_KEY
 
-  private async fetch<T>(
-    endpoint: string,
-    params: Record<string, string> = {}
-  ) {
+  async fetch<T>(endpoint: string, params: Record<string, string> = {}) {
     const queryParams = new URLSearchParams({
       key: this.apiKey!,
       ...params,
@@ -20,17 +15,6 @@ class RAWGClient {
     }
 
     return response.json() as Promise<T>
-  }
-
-  async searchGames(search: string, page: number = 1) {
-    return this.fetch<RAWG.Response<RAWG.Game>>('games', {
-      search,
-      page: page.toString(),
-    })
-  }
-
-  async getGame(slug: string) {
-    return this.fetch<RAWG.Game>(`games/${slug}`)
   }
 }
 

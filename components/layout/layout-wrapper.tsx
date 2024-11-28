@@ -29,7 +29,7 @@ export default function LayoutWrapper({
       <div className="min-h-screen bg-bg-dark">
         <Navbar />
         <div className="pt-20">
-          <div className="flex w-full gap-[8%] px-[8%]">
+          <div className="flex w-full gap-[4%] px-[8%]">
             <Sidebar />
             <main className="flex-1 min-w-0">
               <div className="w-full min-w-0">

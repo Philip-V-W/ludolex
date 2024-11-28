@@ -1,53 +1,92 @@
 import { igdbClient } from './igdb'
 import { rawgClient } from './rawg'
+import type { TransformedGame, IGDBGame, RAWGGame, RAWGResponse } from '@/features/games/types'
+import { transformIGDBGame, transformRAWGGame } from '@/features/games/utils/transformers'
 
-export async function searchGames(query: string) {
-  try {
-    // Validate API configuration
-    if (!process.env.IGDB_CLIENT_ID || !process.env.IGDB_CLIENT_SECRET) {
-      throw new Error('IGDB API configuration missing')
-    }
-
-    if (!process.env.RAWG_API_KEY) {
-      throw new Error('RAWG API configuration missing')
-    }
-
-    // Try IGDB first
-    try {
-      const igdbResults = await igdbClient.searchGames(query)
-      if (igdbResults.length > 0) {
-        return igdbResults
-      }
-    } catch (error) {
-      console.error('IGDB search error:', error)
-    }
-
-    // Fallback to RAWG
-    try {
-      const rawgResults = await rawgClient.searchGames(query)
-      return rawgResults.results
-    } catch (error) {
-      console.error('RAWG search error:', error)
-    }
-
+export async function searchGames(query: string): Promise<TransformedGame[]> {
+  if (!query.trim()) {
     return []
+  }
+
+  try {
+    // IGDB Search
+    const igdbQuery = `
+      search "${query.replace(/"/g, '\\"')}";
+      fields name,slug,cover.*,first_release_date,summary,rating,genres.*,platforms.*;
+      limit 10;
+    `
+    const igdbResults = await igdbClient.fetch<IGDBGame[]>('games', igdbQuery)
+    if (igdbResults?.length > 0) {
+      return igdbResults.map(transformIGDBGame)
+    }
+
+    // RAWG Search fallback
+    const rawgResults = await rawgClient.fetch<RAWGResponse<RAWGGame>>('games', {
+      search: query,
+      page: '1',
+      page_size: '10',
+    })
+    return rawgResults?.results?.map(transformRAWGGame) || []
   } catch (error) {
     console.error('Error searching games:', error)
-    throw error
+    return []
   }
 }
 
-export async function getGame(identifier: string | number) {
+export async function getGame(identifier: string | number): Promise<TransformedGame | null> {
   try {
     if (typeof identifier === 'number') {
-      const game = await igdbClient.getGame(identifier)
-      console.log('IGDB Client fetched game:', game)
-      return game
-    } else {
-      // return await rawgClient.getGame(identifier)
+      const igdbQuery = `
+        fields name,slug,cover.*,first_release_date,summary,rating,genres.*,platforms.*;
+        where id = ${identifier};
+      `
+      const [igdbGame] = await igdbClient.fetch<IGDBGame[]>('games', igdbQuery)
+      return igdbGame ? transformIGDBGame(igdbGame) : null
     }
+
+    const rawgGame = await rawgClient.fetch<RAWGGame>(`games/${identifier}`)
+    return rawgGame ? transformRAWGGame(rawgGame) : null
   } catch (error) {
     console.error('Error fetching game:', error)
-    throw error
+    return null
+  }
+}
+
+export async function getTrendingGames(): Promise<TransformedGame[]> {
+  try {
+    const today = new Date()
+    const thirtyDaysAgo = new Date(today.setDate(today.getDate() - 30))
+    const dateRange = `${thirtyDaysAgo.toISOString().split('T')[0]},${new Date().toISOString().split('T')[0]}`
+
+    const response = await rawgClient.fetch<RAWGResponse<RAWGGame>>('games', {
+      ordering: '-relevance',
+      dates: dateRange,
+      page_size: '10',
+    })
+
+    if (!response?.results?.length) {
+      return []
+    }
+
+    const gamesWithDetails = await Promise.all(
+      response.results.map(async game => {
+        try {
+          const details = await rawgClient.fetch<RAWGGame>(`games/${game.slug}`)
+          return transformRAWGGame({
+            ...game,
+            description: details.description,
+            short_screenshots: details.short_screenshots,
+          })
+        } catch (error) {
+          console.error(`Error fetching details for game ${game.slug}:`, error)
+          return transformRAWGGame(game)
+        }
+      }),
+    )
+
+    return gamesWithDetails.filter(Boolean)
+  } catch (error) {
+    console.error('Error fetching trending games:', error)
+    return []
   }
 }

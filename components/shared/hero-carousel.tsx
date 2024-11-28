@@ -1,4 +1,5 @@
 'use client'
+
 import React, { ComponentPropsWithRef, useCallback, useEffect, useState } from 'react'
 import { EmblaCarouselType, EmblaOptionsType } from 'embla-carousel'
 import Autoplay from 'embla-carousel-autoplay'
@@ -6,21 +7,42 @@ import useEmblaCarousel from 'embla-carousel-react'
 import { cn } from '@/lib/utils'
 import Image from 'next/image'
 
-export type Game = {
+// TODO: place these in the correct location and add more platforms
+export const PLATFORM_SLUG_MAP: Record<string, string> = {
+  'PlayStation 5': 'playstation5',
+  'PlayStation 4': 'playstation4',
+  'Xbox One': 'xbox-one',
+  'Xbox Series S/X': 'xbox-series-x',
+  'PC': 'pc',
+  'Nintendo Switch': 'nintendo-switch',
+  'iOS': 'ios',
+  'Android': 'android',
+}
+
+export type PlatformInfo = {
+  name: string;
+  slug: string;
+}
+
+export type CarouselGame = {
   id: string
   title: string
   description: string
   mainImage: string
   thumbnails: string[]
-  platforms: string[]
+  platforms: PlatformInfo[]
   genres: string[]
   score: number
 }
 
 type CarouselProps = {
-  games: Game[]
+  games: CarouselGame[]
   options?: EmblaOptionsType
   className?: string
+}
+
+export function getPlatformIconSlug(platformName: string): string {
+  return PLATFORM_SLUG_MAP[platformName]
 }
 
 // Previous Button Component
@@ -103,8 +125,9 @@ const DotButton: React.FC<ComponentPropsWithRef<'button'> & { isFirst?: boolean;
   )
 }
 
-const GameSlide: React.FC<{ game: Game }> = ({ game }) => {
+const GameSlide: React.FC<{ game: CarouselGame }> = ({ game }) => {
   const [activeImage, setActiveImage] = useState(game.mainImage)
+
 
   return (
     <div className="relative flex w-full h-auto" style={{ minWidth: '0' }}>
@@ -125,14 +148,16 @@ const GameSlide: React.FC<{ game: Game }> = ({ game }) => {
               {game.title}
             </h2>
             {/* Platform icons */}
+
             <div className="flex gap-[1%]">
-              {game.platforms.map((platform, idx) => (
+              {game.platforms.map((platform: PlatformInfo, idx) => (
                 <div key={idx} className="w-[2.5%] aspect-square relative">
                   <Image
-                    src={`/platform_icons/${platform}`}
-                    alt={`Platform icon ${idx + 1}`}
+                    src={`/platform_icons/${getPlatformIconSlug(platform.name)}.svg`}
+                    alt={platform.name}
                     fill
                     className="object-contain"
+                    unoptimized
                   />
                 </div>
               ))}
@@ -198,7 +223,7 @@ const EmblaCarousel: React.FC<CarouselProps> = (props) => {
   const { games, options, className } = props
 
   const autoplayOptions = {
-    delay: 25000000,
+    delay: 4000,
     rootNode: (emblaRoot: HTMLElement) => emblaRoot.parentElement,
   }
 

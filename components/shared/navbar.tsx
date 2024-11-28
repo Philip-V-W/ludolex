@@ -41,7 +41,7 @@ const Navbar = () => {
         </div>
 
         {/* Search Bar with User Menu */}
-        <div className="flex-1 pl-[8.5%]">
+        <div className="flex-1 pl-[4%]">
           <div className="relative flex h-10 w-full items-center rounded-full bg-bg-nav">
             <Search className="ml-4 h-4 w-4 text-text-muted" />
             <input

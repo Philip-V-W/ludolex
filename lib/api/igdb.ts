@@ -1,4 +1,4 @@
-import { IGDB } from '@/types/api'
+import { IGDBAccessToken } from '@/features/games/types'
 
 class IGDBClient {
   private accessToken: string | null = null
@@ -19,13 +19,13 @@ class IGDBClient {
       }),
     })
 
-    const data: IGDB.AccessToken = await response.json()
+    const data: IGDBAccessToken = await response.json()
     this.accessToken = data.access_token
     this.tokenExpiry = Date.now() + data.expires_in * 1000
     return this.accessToken
   }
 
-  private async fetch<T>(endpoint: string, query: string): Promise<T> {
+  async fetch<T>(endpoint: string, query: string): Promise<T> {
     const token = await this.getAccessToken()
 
     const response = await fetch(`https://api.igdb.com/v4/${endpoint}`, {
@@ -44,24 +44,6 @@ class IGDBClient {
 
     return response.json()
   }
-
-  async searchGames(search: string, limit: number = 10) {
-    const query = `
-      search "${search}";
-      fields name,slug,cover.*,first_release_date,summary,rating,genres.*,platforms.*;
-      limit ${limit};
-    `
-    return this.fetch<IGDB.Game[]>('games', query)
-  }
-
-  async getGame(id: number) {
-    const query = `
-      fields name,slug,cover.*,first_release_date,summary,rating,genres.*,platforms.*;
-      where id = ${id};
-    `
-    return this.fetch<IGDB.Game[]>('games', query).then((games) => games[0])
-  }
 }
 
 export const igdbClient = new IGDBClient()
-

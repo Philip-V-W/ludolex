@@ -1,23 +1,11 @@
-import {Session, User} from "next-auth";
-import {JWT} from "next-auth/jwt";
+import type { Session } from 'next-auth'
+import type { User } from 'next-auth'
+import type { JWT } from 'next-auth/jwt'
 
-// Next-Auth Type Extensions
-export interface AuthSession extends Session {
-  user: {
-    id: string
-    email: string
-    username: string
-  }
-}
-
-export interface AuthUser extends User {
-  username: string
-}
-
-export interface AuthToken extends JWT {
-  id: string
-  username: string
-}
+// Auth Types
+export type AuthSession = Session
+export type AuthUser = User
+export type AuthToken = JWT
 
 // Additional Auth Types
 export interface LoginCredentials {
@@ -34,12 +22,13 @@ export interface AuthState {
   isLoading: boolean
   user: AuthUser | null
 }
- export interface AuthHookReturn {
-   login: (data: LoginCredentials) => Promise<boolean>
-   register: (data: RegisterCredentials) => Promise<boolean>
-   logout: () => Promise<void>
-   isLoading: boolean
-   error: string | null
-   session: AuthSession | null
-   isAuthenticated: boolean
- }
+
+export interface AuthHookReturn {
+  login: (data: LoginCredentials) => Promise<boolean>
+  register: (data: RegisterCredentials) => Promise<boolean>
+  logout: () => Promise<void>
+  isLoading: boolean
+  error: string | null
+  session: AuthSession | null
+  isAuthenticated: boolean
+}
