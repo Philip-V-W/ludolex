@@ -71,11 +71,23 @@ export async function getTrendingGames(): Promise<TransformedGame[]> {
     const gamesWithDetails = await Promise.all(
       response.results.map(async game => {
         try {
-          const details = await rawgClient.fetch<RAWGGame>(`games/${game.slug}`)
+          // Get game details
+          const details = await rawgClient.fetch<RAWGGame>(`games/${game.id}`)
+
+          // Get screenshots separately
+          const screenshots = await rawgClient.fetch<{ results: { image: string }[] }>(
+            `games/${game.id}/screenshots`,
+          )
+
+          // Transform the game with screenshots
           return transformRAWGGame({
             ...game,
-            description: details.description,
-            short_screenshots: details.short_screenshots,
+            description: details.description || game.description,
+            // Use screenshots from the dedicated endpoint
+            short_screenshots: screenshots.results?.map(s => ({
+              id: 0,
+              image: s.image,
+            })) || [],
           })
         } catch (error) {
           console.error(`Error fetching details for game ${game.slug}:`, error)

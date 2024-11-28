@@ -6,6 +6,7 @@ import Autoplay from 'embla-carousel-autoplay'
 import useEmblaCarousel from 'embla-carousel-react'
 import { cn } from '@/lib/utils'
 import Image from 'next/image'
+import { decodeHTMLEntities } from '@/lib/utils/textHelpers'
 
 // TODO: place these in the correct location and add more platforms
 export const PLATFORM_SLUG_MAP: Record<string, string> = {
@@ -168,8 +169,8 @@ const GameSlide: React.FC<{ game: CarouselGame }> = ({ game }) => {
         {/* Right side - Info (33.33%) */}
         <div className="relative w-[33.33%] flex flex-col bg-bg-nav p-[3%]" style={{ minWidth: '0' }}>
           {/* Thumbnails */}
-          <div className="grid grid-cols-2 gap-[4%]">
-            {game.thumbnails.map((thumb, idx) => (
+          <div className="grid grid-cols-2 gap-[7%2%]">
+            {game.thumbnails.slice(0, 4).map((thumb, idx) => (
               <button
                 key={idx}
                 className="relative aspect-video overflow-hidden hover:ring-1 hover:ring-text-primary transition-all"
@@ -187,14 +188,14 @@ const GameSlide: React.FC<{ game: CarouselGame }> = ({ game }) => {
           </div>
 
           {/* Description */}
-          <div className="mt-[4%]">
+          <div className="mt-[7%]">
             <p className="fluid-max-14 text-text-primary line-clamp-4">
-              {game.description}
+              {decodeHTMLEntities(game.description)}
             </p>
           </div>
 
           {/* Score Bar */}
-          <div className="mt-[4%]">
+          <div className="mt-[5%]">
             <div className="h-[0.4cqw] w-full rounded-full bg-accent-primary">
               <div
                 className="h-full rounded-full bg-rating-success transition-all"
@@ -204,7 +205,7 @@ const GameSlide: React.FC<{ game: CarouselGame }> = ({ game }) => {
           </div>
 
           {/* Genre tags */}
-          <div className="flex flex-wrap justify-center gap-[2%] mt-[4%] overflow-hidden">
+          <div className="flex flex-wrap justify-center gap-[2%] mt-[5%] overflow-hidden">
             {game.genres.slice(0, 10).map((genre) => (
               <span
                 key={genre}

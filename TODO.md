@@ -19,6 +19,7 @@
 ## Future Improvements
 
 - [ ] add notifications
+- [ ] implement NSFW filter
 
 ## Notes
 

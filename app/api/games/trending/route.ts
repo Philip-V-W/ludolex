@@ -18,6 +18,14 @@ export async function GET() {
         lastFetched: {
           gte: new Date(Date.now() - CACHE_DURATION),
         },
+        AND: {
+          mainImage: {
+            not: null
+          },
+          screenshots: {
+            isEmpty: false
+          }
+        }
       },
       include: {
         platforms: {
@@ -44,7 +52,9 @@ export async function GET() {
         title: game.title,
         description: stripHtml(game.description || ''),
         mainImage: game.mainImage || '/placeholder.jpg',
-        thumbnails: game.screenshots || Array(4).fill(game.mainImage || '/placeholder.jpg'),
+        thumbnails: game.screenshots.length > 0
+          ? game.screenshots
+          : Array(4).fill(game.mainImage || '/placeholder.jpg'),
         platforms: game.platforms.map(p => ({
           name: p.platform.name,
           slug: p.platform.slug,
@@ -55,7 +65,7 @@ export async function GET() {
       return NextResponse.json({ success: true, data: transformedCachedGames })
     }
 
-    // Fetch fresh games using the imported function
+    // Fetch fresh games if cache miss
     const games = await getTrendingGames()
 
     // Process and cache the games
@@ -69,7 +79,7 @@ export async function GET() {
               title: game.title,
               description: stripHtml(game.description),
               mainImage: game.mainImage,
-              screenshots: game.thumbnails,
+              screenshots: game.thumbnails, // Store thumbnails in screenshots array
               metacritic: game.score,
               lastFetched: new Date(),
               platforms: {
@@ -155,7 +165,7 @@ export async function GET() {
             title: cachedGame.title,
             description: stripHtml(cachedGame.description || ''),
             mainImage: cachedGame.mainImage || '/placeholder.jpg',
-            thumbnails: cachedGame.screenshots,
+            thumbnails: cachedGame.screenshots || [cachedGame.mainImage || '/placeholder.jpg'],
             platforms: cachedGame.platforms.map(p => ({
               name: p.platform.name,
               slug: p.platform.slug,
