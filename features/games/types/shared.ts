@@ -1,15 +1,11 @@
-export interface TransformedGame {
-  id: string
-  title: string
-  description: string
-  mainImage: string
-  thumbnails: string[]
-  platforms: {
-    name: string
-    slug: string
-  }[]
-  genres: string[]
-  score: number
+export interface Platform {
+  id: number
+  name: string
+  slug: string
 }
 
-// TODO: add other shared interfaces like Platform, Store, etc.
+export interface Genre {
+  id: number
+  name: string
+  slug: string
+}

@@ -2,6 +2,7 @@ import { NextResponse } from 'next/server'
 import { getMostAnticipatedGames } from '@/lib/api/games'
 import { stripHtml } from '@/lib/utils'
 import { cacheGames, getCachedGames } from '@/lib/api/services/cache'
+import { ExtendedTransformedGame } from '@/features/games/types/api/games'
 
 const GAMES_LIMIT = 20
 
@@ -31,7 +32,7 @@ export async function GET() {
 
     // Fetch fresh games
     const games = await getMostAnticipatedGames()
-    const cachedResults = await cacheGames(games, stripHtml)
+    const cachedResults = await cacheGames(games as ExtendedTransformedGame[], stripHtml)
 
     const validGames = cachedResults
       .filter(Boolean)

@@ -1,6 +1,6 @@
 import { NextResponse } from 'next/server'
 import { getGame } from '@/lib/api/games'
-import { cacheGame, getCachedGame } from '@/lib/api/cache'
+import { cacheGame, getCachedGame } from '@/lib/api/services/cache'
 
 export async function GET(
   request: Request,

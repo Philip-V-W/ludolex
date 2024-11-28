@@ -15,6 +15,7 @@
 - [ ] game card grid margin bottom needs adjustment
 - [ ] missing drop shadows on all the card components
 - [ ] sidebar scaling is a bit off at around 1024px
+- [ ] fix getTrendingGames, function is fetching the wrong data
 
 ## Future Improvements
 

@@ -1,4 +1,4 @@
-import type { IGDBGame, RAWGGame, TransformedGame } from '../types'
+import type { IGDBGame, RAWGGame, TransformedGame, SystemRequirements, ExtendedGameData } from '../types'
 import { TopRated } from '@/components/shared/card-carousel'
 
 export function transformIGDBGame(game: IGDBGame): TransformedGame {
@@ -14,19 +14,32 @@ export function transformIGDBGame(game: IGDBGame): TransformedGame {
   }
 }
 
-export function transformRAWGGame(game: RAWGGame): TransformedGame {
+export function transformRAWGGame(game: RAWGGame): ExtendedGameData {
+  const pcPlatform = game.platforms?.find(p => p.platform.slug === 'pc')
+
   return {
     id: game.id.toString(),
+    rawgId: game.id,
     title: game.name,
     description: game.description || '',
     mainImage: game.background_image || '/placeholder.png',
-    thumbnails: game.short_screenshots?.map(s => s.image) || [],
+    thumbnails: [
+      game.background_image,
+      ...(game.short_screenshots?.map(s => s.image) || [])
+    ].filter(Boolean) as string[],
     platforms: game.platforms?.map(p => ({
       name: p.platform.name,
       slug: p.platform.slug,
     })) || [],
     genres: game.genres?.map(g => g.name) || [],
     score: game.metacritic || 0,
+    releaseDate: game.released || null,
+    ageRating: game.esrb_rating?.id || null,
+    supportedLanguages: game.languages || [],
+    systemRequirements: pcPlatform?.requirements || null,
+    fullVideoUrl: null,
+    previewVideoUrl: null,
+    videoPreview: null,
   }
 }
 

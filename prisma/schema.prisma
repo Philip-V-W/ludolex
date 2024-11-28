@@ -42,8 +42,6 @@ model Game {
   title              String
   slug               String    @unique
   description        String?   @db.Text
-  // coverImage         String?   @map("cover_image")
-  // backgroundImage    String?   @map("background_image")
   mainImage          String?   @map("background_image") // Use this for both thumbnail and main
   screenshots        String[]  @map("screenshots") // Store array of screenshot URLs
   previewVideoUrl    String?   @map("preview_video_url") // 480p for cards/hover

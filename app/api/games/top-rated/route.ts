@@ -2,6 +2,7 @@ import { NextResponse } from 'next/server'
 import { getTopRatedGames } from '@/lib/api/games'
 import { stripHtml } from '@/lib/utils'
 import { cacheGames, getCachedGames } from '@/lib/api/services/cache'
+import { ExtendedTransformedGame } from '@/features/games/types/api/games'
 
 const GAMES_LIMIT = 20
 
@@ -24,26 +25,26 @@ export async function GET() {
           name: p.platform.name,
           slug: p.platform.slug,
         })),
-        score: game.metacritic || 0,
+        score: game.metacritic ?? 0,
       }))
       return NextResponse.json({ success: true, data: transformedGames })
     }
 
     // Fetch fresh games
     const games = await getTopRatedGames()
-    const cachedResults = await cacheGames(games, stripHtml)
+    const cachedResults = await cacheGames(games as ExtendedTransformedGame[], stripHtml)
 
     const validGames = cachedResults
-      .filter(Boolean)
+      .filter((game): game is NonNullable<typeof game> => game !== null)
       .map(game => ({
-        id: String(game!.id),
-        title: game!.title,
-        mainImage: game!.mainImage || '/placeholder.png',
-        platforms: game!.platforms.map(p => ({
+        id: String(game.id),
+        title: game.title,
+        mainImage: game.mainImage || '/placeholder.png',
+        platforms: game.platforms.map(p => ({
           name: p.platform.name,
           slug: p.platform.slug,
         })),
-        score: game!.metacritic || 0,
+        score: game.metacritic ?? 0,
       }))
 
     return NextResponse.json({ success: true, data: validGames })

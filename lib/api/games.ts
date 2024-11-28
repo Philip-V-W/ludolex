@@ -1,7 +1,16 @@
 import { igdbClient } from './igdb'
 import { rawgClient } from './rawg'
-import { IGDBGame, RAWGGame, RAWGResponse, TransformedGame } from '@/features/games/types'
-import { transformIGDBGame, transformRAWGGame } from '@/features/games/utils/transformers'
+import {
+  IGDBGame,
+  RAWGGame,
+  RAWGGameDetails,
+  RAWGResponse,
+} from '@/features/games/types'
+import {
+  transformIGDBGame,
+  transformRAWGGame,
+} from '@/features/games/utils/transformers'
+import { ExtendedGameData, TransformedGame } from '@/features/games/types/api/games'
 
 export async function searchGames(query: string): Promise<TransformedGame[]> {
   if (!query.trim()) {
@@ -71,7 +80,7 @@ export async function getTrendingGames(): Promise<TransformedGame[]> {
     const gamesWithDetails = await Promise.all(
       response.results.map(async game => {
         try {
-          const details = await rawgClient.fetch<RAWGGame>(`games/${game.id}`)
+          const details = await rawgClient.fetch<RAWGGameDetails>(`games/${game.id}`)
 
           const screenshots = await rawgClient.fetch<{ results: { image: string }[] }>(
             `games/${game.id}/screenshots`,
@@ -79,6 +88,7 @@ export async function getTrendingGames(): Promise<TransformedGame[]> {
 
           return transformRAWGGame({
             ...game,
+            ...details,
             description: details.description || game.description,
             short_screenshots: screenshots.results?.map(s => ({
               id: 0,
@@ -99,7 +109,7 @@ export async function getTrendingGames(): Promise<TransformedGame[]> {
   }
 }
 
-export async function getTopRatedGames(): Promise<TransformedGame[]> {
+export async function getTopRatedGames(): Promise<ExtendedGameData[]> {
   try {
     const response = await rawgClient.fetch<RAWGResponse<RAWGGame>>('games', {
       ordering: '-metacritic',
@@ -133,7 +143,7 @@ export async function getTopRatedGames(): Promise<TransformedGame[]> {
   }
 }
 
-export async function getMostAnticipatedGames(): Promise<TransformedGame[]> {
+export async function getMostAnticipatedGames(): Promise<ExtendedGameData[]> {
   try {
     const today = new Date().toISOString().split('T')[0]
 

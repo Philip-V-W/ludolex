@@ -1,15 +1,32 @@
 import { prisma } from '@/lib/db/prisma'
-import type { TransformedGame } from '@/features/games/types'
+import { Prisma } from '@prisma/client'
+import { ExtendedTransformedGame } from '@/features/games/types/api/games'
 
 const CACHE_DURATION = 24 * 60 * 60 * 1000 // 24 hours
 
 interface CacheOptions {
   limit?: number
-  orderBy?: { [key: string]: 'asc' | 'desc' }
-  where?: any
+  orderBy?: Prisma.GameOrderByWithRelationInput
+  where?: Prisma.GameWhereInput
 }
 
-export async function getCachedGames(options: CacheOptions = {}) {
+export type GameWithIncludes = Prisma.GameGetPayload<{
+  include: {
+    platforms: {
+      include: {
+        platform: true
+      }
+    }
+    genres: {
+      include: {
+        genre: true
+      }
+    }
+  }
+}>
+
+// Retrieves games from the database that have been cached recently
+export async function getCachedGames(options: CacheOptions = {}): Promise<GameWithIncludes[]> {
   const { limit = 10, orderBy = { releaseDate: 'desc' }, where = {} } = options
 
   return prisma.game.findMany({
@@ -41,86 +58,73 @@ export async function getCachedGames(options: CacheOptions = {}) {
   })
 }
 
+// Caches games data in the database
 export async function cacheGames(
-  games: TransformedGame[],
+  games: ExtendedTransformedGame[],
   stripHtml: (html: string) => string,
-) {
+): Promise<(GameWithIncludes | null)[]> {
   return Promise.all(
     games.map(async (game) => {
       try {
+        const slug = game.title.toLowerCase().replace(/[^a-z0-9]+/g, '-')
+
+        const platformsCreate = {
+          create: (game.platforms ?? []).map(p => ({
+            platform: {
+              connectOrCreate: {
+                where: { name: p.name },
+                create: {
+                  name: p.name,
+                  slug: p.slug,
+                },
+              },
+            },
+          })),
+        }
+
+        const genresCreate = {
+          create: (game.genres ?? []).map(genre => ({
+            genre: {
+              connectOrCreate: {
+                where: { name: genre },
+                create: {
+                  name: genre,
+                  slug: genre.toLowerCase().replace(/[^a-z0-9]+/g, '-'),
+                },
+              },
+            },
+          })),
+        }
+
+        const createInput: Prisma.GameCreateInput = {
+          title: game.title,
+          slug,
+          description: stripHtml(game.description),
+          mainImage: game.mainImage,
+          screenshots: game.thumbnails ?? [],
+          metacritic: game.score ?? undefined,
+          lastFetched: new Date(),
+          rawgId: game.rawgId ?? null,
+          releaseDate: game.releaseDate ? new Date(game.releaseDate) : null,
+          ageRating: game.ageRating ?? null,
+          supportedLanguages: game.supportedLanguages ?? [],
+          systemRequirements: game.systemRequirements as Prisma.InputJsonValue,
+          platforms: platformsCreate,
+          genres: genresCreate,
+        }
+
         return await prisma.game.upsert({
-          where: {
-            slug: game.title.toLowerCase().replace(/[^a-z0-9]+/g, '-'),
-          },
+          where: { slug },
+          create: createInput,
           update: {
-            title: game.title,
-            description: stripHtml(game.description),
-            mainImage: game.mainImage,
-            screenshots: game.thumbnails || [],
-            metacritic: game.score,
-            lastFetched: new Date(),
+            ...createInput,
             platforms: {
               deleteMany: {},
-              create: (game.platforms || []).map(p => ({
-                platform: {
-                  connectOrCreate: {
-                    where: { name: p.name },
-                    create: {
-                      name: p.name,
-                      slug: p.slug,
-                    },
-                  },
-                },
-              })),
+              ...platformsCreate,
             },
             genres: {
               deleteMany: {},
-              create: (game.genres || []).map(genre => ({
-                genre: {
-                  connectOrCreate: {
-                    where: { name: genre },
-                    create: {
-                      name: genre,
-                      slug: genre.toLowerCase().replace(/[^a-z0-9]+/g, '-'),
-                    },
-                  },
-                },
-              })),
-            },
-          },
-          create: {
-            title: game.title,
-            slug: game.title.toLowerCase().replace(/[^a-z0-9]+/g, '-'),
-            description: stripHtml(game.description),
-            mainImage: game.mainImage,
-            screenshots: game.thumbnails || [],
-            metacritic: game.score,
-            lastFetched: new Date(),
-            platforms: {
-              create: (game.platforms || []).map(p => ({
-                platform: {
-                  connectOrCreate: {
-                    where: { name: p.name },
-                    create: {
-                      name: p.name,
-                      slug: p.slug,
-                    },
-                  },
-                },
-              })),
-            },
-            genres: {
-              create: (game.genres || []).map(genre => ({
-                genre: {
-                  connectOrCreate: {
-                    where: { name: genre },
-                    create: {
-                      name: genre,
-                      slug: genre.toLowerCase().replace(/[^a-z0-9]+/g, '-'),
-                    },
-                  },
-                },
-              })),
+              ...genresCreate,
             },
           },
           include: {
