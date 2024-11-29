@@ -3,11 +3,26 @@ export interface SystemRequirements {
   recommended?: string
 }
 
+export interface RAWGGameDetails extends RAWGGame {
+  requirements?: SystemRequirements
+}
+
 export interface RAWGResponse<T> {
   count: number
   next: string | null
   previous: string | null
   results: T[]
+}
+
+export interface RAWGStore {
+  id: number
+  name: string
+  slug: string
+}
+
+export interface RAWGGameStore {
+  url: string
+  store: RAWGStore
 }
 
 export interface RAWGGame {
@@ -29,7 +44,10 @@ export interface RAWGGame {
       slug: string
       name: string
     }
-    requirements?: SystemRequirements
+    requirements?: {
+      minimum?: string
+      recommended?: string
+    }
   }[]
   genres: {
     id: number
@@ -42,8 +60,5 @@ export interface RAWGGame {
     slug: string
   }
   languages?: string[]
-}
-
-export interface RAWGGameDetails extends RAWGGame {
-  requirements?: SystemRequirements
+  stores?: RAWGGameStore[]
 }

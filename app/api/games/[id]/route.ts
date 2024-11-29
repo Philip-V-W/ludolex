@@ -34,22 +34,38 @@ export async function GET(
           previewVideoUrl: cachedGame.previewVideoUrl,
           fullVideoUrl: cachedGame.fullVideoUrl,
           videoPreview: cachedGame.videoPreview,
+          releaseDate: cachedGame.releaseDate,
+          metacritic: cachedGame.metacritic || 0,
+          rating: cachedGame.rating,
+          ageRating: cachedGame.ageRating,
+          supportedLanguages: cachedGame.supportedLanguages,
+          systemRequirements: cachedGame.systemRequirements,
           platforms: cachedGame.platforms.map(p => ({
             name: p.platform.name,
             slug: p.platform.slug,
           })),
           genres: cachedGame.genres.map(g => g.genre.name),
-          metacritic: cachedGame.metacritic || 0,
+          stores: cachedGame.gameStore.map(s => ({
+            name: s.store.name,
+            slug: s.store.slug,
+            icon: s.store.icon,
+            url: s.url,
+          })),
+          companies: cachedGame.companies.map(c => ({
+            name: c.company.name,
+            slug: c.company.slug,
+            role: c.role,
+          })),
         },
       })
     }
 
-    // Fetch fresh games
+    // Fetch fresh games and cache
     const gameData = await getGame(slug)
     if (!gameData) {
       return NextResponse.json(
         { success: false, error: 'Game not found' },
-        { status: 404 },
+        { status: 500 },
       )
     }
 
@@ -80,6 +96,12 @@ export async function GET(
         })),
         genres: cachedResult.genres.map(g => g.genre.name),
         metacritic: cachedResult.metacritic || 0,
+        stores: cachedResult.gameStore.map(s => ({
+          name: s.store.name,
+          slug: s.store.slug,
+          icon: s.store.icon,
+          url: s.url,
+        })),
       },
     })
   } catch (error) {

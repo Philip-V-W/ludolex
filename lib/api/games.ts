@@ -10,7 +10,8 @@ import {
   transformIGDBGame,
   transformRAWGGame,
 } from '@/features/games/utils/transformers'
-import { ExtendedGameData, TransformedGame } from '@/features/games/types/api/games'
+import { CompanyData, ExtendedGameData, TransformedGame } from '@/features/games/types/api/games'
+import { CompanyRole } from '@prisma/client'
 
 export async function searchGames(query: string): Promise<TransformedGame[]> {
   if (!query.trim()) {
@@ -42,19 +43,64 @@ export async function searchGames(query: string): Promise<TransformedGame[]> {
   }
 }
 
-export async function getGame(identifier: string | number): Promise<TransformedGame | null> {
+export async function getGame(identifier: string | number): Promise<ExtendedGameData | null> {
   try {
-    if (typeof identifier === 'number') {
-      const igdbQuery = `
-        fields name,slug,cover.*,first_release_date,summary,rating,genres.*,platforms.*;
-        where id = ${identifier};
-      `
-      const [igdbGame] = await igdbClient.fetch<IGDBGame[]>('games', igdbQuery)
-      return igdbGame ? transformIGDBGame(igdbGame) : null
+    // First get RAWG data as our base
+    const rawgGame = await rawgClient.fetch<RAWGGame>(`games/${identifier}`)
+    if (!rawgGame) return null
+
+    // Transform RAWG data for our base
+    const baseGameData = transformRAWGGame(rawgGame)
+
+    // Search for the game in IGDB using the title
+    const igdbSearchQuery = `
+      search "${rawgGame.name.replace(/"/g, '\\"')}";
+      fields 
+        name,
+        slug,
+        involved_companies.company.name,
+        involved_companies.company.id,
+        involved_companies.company.slug,
+        involved_companies.developer,
+        involved_companies.publisher,
+        involved_companies.porting,
+        language_supports.language.name,
+        language_supports.language_support_type.name;
+      limit 1;
+    `
+    const [igdbGame] = await igdbClient.fetch<IGDBGame[]>('games', igdbSearchQuery)
+
+    // If we found matching IGDB game data, merge it with our base data
+    if (igdbGame) {
+      const companies = igdbGame.involved_companies?.reduce<CompanyData[]>((acc, ic) => {
+        const baseCompanyData = {
+          name: ic.company.name,
+          slug: ic.company.slug || ic.company.name.toLowerCase().replace(/[^a-z0-9]+/g, '-'),
+        }
+
+        if (ic.developer) {
+          acc.push({ ...baseCompanyData, role: CompanyRole.DEVELOPER })
+        }
+        if (ic.publisher) {
+          acc.push({ ...baseCompanyData, role: CompanyRole.PUBLISHER })
+        }
+        if (ic.porting) {
+          acc.push({ ...baseCompanyData, role: CompanyRole.PORT_DEVELOPER })
+        }
+
+        return acc
+      }, []) || []
+
+      return {
+        ...baseGameData,
+        igdbId: igdbGame.id,
+        companies,
+        supportedLanguages: igdbGame.language_supports?.map(ls => ls.language.name) || baseGameData.supportedLanguages,
+      }
     }
 
-    const rawgGame = await rawgClient.fetch<RAWGGame>(`games/${identifier}`)
-    return rawgGame ? transformRAWGGame(rawgGame) : null
+    return baseGameData
+
   } catch (error) {
     console.error('Error fetching game:', error)
     return null

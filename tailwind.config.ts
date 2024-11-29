@@ -19,6 +19,7 @@ const fluidType = plugin(({ matchUtilities, theme }) => {
         'max-12': '0.375_0.75',    // Scales from 10px to 12px genre__text
         'max-14': '0.4375_0.875',    // Scales from 12px to 14px rating__bubble__text
         'max-16': '0.5_1',       // Scales from 14px to 16px sidebar__text
+        'max-18': '0.5625_1.125',    // Scales from 16px to 18px sidebar__text__bold
         'max-20': '0.625_1.25',        // Scales from 16px to 20px sidebar__semibold__text
         'max-26': '0.8125_1.625',    // Scales from 20px to 26px sidebar__bold__text
         'max-32': '1_2',        // Scales from 24px to 32px title__text
@@ -89,6 +90,7 @@ const config = {
       colors: {
         'bg-dark': '#171A21',
         'bg-nav': '#0F1115',
+        'bg-white': '#FFFFFF',
         icon: {
           light: '#FFFFFF',
           dark: '#1E222B',
@@ -108,6 +110,7 @@ const config = {
           primary: '#FFFFFF',
           secondary: '#8F98A0',
           muted: '#66727F',
+          dark: '#0F1115',
         },
         'custom-border': {
           light: '#2D3544',

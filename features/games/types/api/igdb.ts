@@ -1,12 +1,16 @@
-export interface IGDBAccessToken {
-  access_token: string
-  expires_in: number
-  token_type: string
+export interface IGDBCompany {
+  id: number
+  name: string
+  slug: string
+  developed?: number[]
+  published?: number[]
+  url?: string
 }
 
 export interface IGDBGame {
   id: number
   name: string
+  slug: string
   summary?: string
   cover?: {
     url: string
@@ -18,5 +22,20 @@ export interface IGDBGame {
   }>
   genres?: Array<{
     name: string
+  }>
+  involved_companies?: Array<{
+    id: number
+    company: IGDBCompany
+    developer: boolean
+    publisher: boolean
+    porting: boolean
+  }>
+  language_supports?: Array<{
+    language: {
+      name: string
+    }
+    language_support_type: {
+      name: string
+    }
   }>
 }

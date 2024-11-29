@@ -4,6 +4,7 @@
 
 - [ ] fix auth routes to not be accessible when logged in
 - [ ] change metacritic rating to user rating
+- [ ] implement tags for GameDetailsSection
 
 
 ## Low Priority

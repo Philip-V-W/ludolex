@@ -22,6 +22,16 @@ export type GameWithIncludes = Prisma.GameGetPayload<{
         genre: true
       }
     }
+    gameStore: {
+      include: {
+        store: true
+      }
+    }
+    companies: {
+      include: {
+        company: true
+      }
+    }
   }
 }>
 
@@ -52,6 +62,16 @@ export async function getCachedGames(options: CacheOptions = {}): Promise<GameWi
           genre: true,
         },
       },
+      gameStore: {
+        include: {
+          store: true,
+        },
+      },
+      companies: {
+        include: {
+          company: true,
+        },
+      },
     },
     orderBy,
     take: limit,
@@ -67,6 +87,28 @@ export async function cacheGames(
     games.map(async (game) => {
       try {
         const slug = game.title.toLowerCase().replace(/[^a-z0-9]+/g, '-')
+
+        // Disconnect all existing relations
+        await prisma.game.update({
+          where: { slug },
+          data: {
+            platforms: { deleteMany: {} },
+            genres: { deleteMany: {} },
+            gameStore: { deleteMany: {} },
+            companies: { deleteMany: {} },
+          },
+        }).catch((error) => {
+          // Only ignore PrismaClientKnownRequestError with code P2025 (Record not found)
+          if (
+            error.code !== 'P2025' &&
+            error.name === 'PrismaClientKnownRequestError'
+          ) {
+            console.error(`Error deleting relations for game ${game.title}:`, error)
+          }
+          if (error.name !== 'PrismaClientKnownRequestError') {
+            console.error(`Unexpected error while deleting relations for game ${game.title}:`, error)
+          }
+        })
 
         const platformsCreate = {
           create: (game.platforms ?? []).map(p => ({
@@ -96,6 +138,37 @@ export async function cacheGames(
           })),
         }
 
+        const storesCreate = {
+          create: (game.stores ?? []).map(store => ({
+            url: store.url,
+            store: {
+              connectOrCreate: {
+                where: { slug: store.store.slug },
+                create: {
+                  name: store.store.name,
+                  slug: store.store.slug,
+                  icon: `/icons/stores/${store.store.slug}.svg`,
+                },
+              },
+            },
+          })),
+        }
+
+        const companiesCreate = {
+          create: (game.companies ?? []).map(company => ({
+            role: company.role,
+            company: {
+              connectOrCreate: {
+                where: { slug: company.slug },
+                create: {
+                  name: company.name,
+                  slug: company.slug,
+                },
+              },
+            },
+          })),
+        }
+
         const createInput: Prisma.GameCreateInput = {
           title: game.title,
           slug,
@@ -111,6 +184,8 @@ export async function cacheGames(
           systemRequirements: game.systemRequirements as Prisma.InputJsonValue,
           platforms: platformsCreate,
           genres: genresCreate,
+          gameStore: storesCreate,
+          companies: companiesCreate,
         }
 
         return await prisma.game.upsert({
@@ -118,14 +193,10 @@ export async function cacheGames(
           create: createInput,
           update: {
             ...createInput,
-            platforms: {
-              deleteMany: {},
-              ...platformsCreate,
-            },
-            genres: {
-              deleteMany: {},
-              ...genresCreate,
-            },
+            platforms: undefined,
+            genres: undefined,
+            gameStore: undefined,
+            companies: undefined,
           },
           include: {
             platforms: {
@@ -136,6 +207,16 @@ export async function cacheGames(
             genres: {
               include: {
                 genre: true,
+              },
+            },
+            gameStore: {
+              include: {
+                store: true,
+              },
+            },
+            companies: {
+              include: {
+                company: true,
               },
             },
           },

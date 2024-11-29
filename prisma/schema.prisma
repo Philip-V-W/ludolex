@@ -64,6 +64,7 @@ model Game {
   genres    GameGenre[]
   platforms GamePlatform[]
   companies GameCompany[]
+  gameStore GameStore[]
 
   @@map("games")
 }
@@ -163,6 +164,18 @@ model Platform {
   @@map("platforms")
 }
 
+model Store {
+  id   Int    @id @default(autoincrement())
+  name String @unique
+  slug String @unique
+  icon String
+
+  // Relations
+  games GameStore[]
+
+  @@map("stores")
+}
+
 // Junction tables
 model GameGenre {
   gameId  Int @map("game_id")
@@ -186,6 +199,19 @@ model GamePlatform {
 
   @@id([gameId, platformId])
   @@map("game_platforms")
+}
+
+model GameStore {
+  gameId  Int    @map("game_id")
+  storeId Int    @map("store_id")
+  url     String // Store-specific purchase URL
+
+  // Relations
+  game  Game  @relation(fields: [gameId], references: [id], onDelete: Cascade)
+  store Store @relation(fields: [storeId], references: [id], onDelete: Cascade)
+
+  @@id([gameId, storeId])
+  @@map("game_stores")
 }
 
 // Enums

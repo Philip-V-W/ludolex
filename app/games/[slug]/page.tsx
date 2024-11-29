@@ -1,9 +1,10 @@
 import { Metadata } from 'next'
 import { getCachedGames } from '@/lib/api/services/cache'
-import { getGame } from '@/lib/api/games'
 import { stripHtml } from '@/lib/utils'
 import GameMediaSection from '@/features/games/components/game-details/game-media-section'
-import { notFound } from 'next/navigation'
+import GameDetailsSection from '@/features/games/components/game-details/game-details-section'
+import GameSideDetails from '@/features/games/components/game-details/game-side-details-section'
+import GameReqDetails from '@/features/games/components/game-details/game-system-req-section'
 
 interface GamePageProps {
   params: {
@@ -24,23 +25,14 @@ export async function generateMetadata({ params }: GamePageProps): Promise<Metad
 }
 
 export default async function GamePage({ params }: GamePageProps) {
-  // Check cache first
-  const [cachedGame] = await getCachedGames({
-    where: { slug: params.slug },
-    limit: 1,
-  })
-
-  if (!cachedGame) {
-    // Fetch and cache if not found
-    const gameData = await getGame(params.slug)
-    if (!gameData) {
-      notFound()
-    }
-  }
-
   return (
-    <div className="min-w-0 pt-[1.5%]">
+    <div className="min-w-0">
       <GameMediaSection slug={params.slug} />
+      <div className="mt-6 grid grid-cols-1 gap-6 lg:grid-cols-[2.5fr,1fr]">
+        <GameDetailsSection slug={params.slug} />
+        <GameSideDetails slug={params.slug} />
+        <GameReqDetails slug={params.slug} />
+      </div>
     </div>
   )
 }
