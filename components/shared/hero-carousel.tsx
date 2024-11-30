@@ -8,10 +8,12 @@ import { cn } from '@/lib/utils'
 import Image from 'next/image'
 import { decodeHTMLEntities } from '@/lib/utils/textHelpers'
 import { getPlatformIconSlug, PlatformInfo } from '@/features/games/utils/platforms'
+import Link from 'next/link'
 
 export type CarouselGame = {
   id: string
   title: string
+  slug: string
   description: string
   mainImage: string
   thumbnails: string[]
@@ -109,97 +111,98 @@ const DotButton: React.FC<ComponentPropsWithRef<'button'> & { isFirst?: boolean;
 const GameSlide: React.FC<{ game: CarouselGame }> = ({ game }) => {
   const [activeImage, setActiveImage] = useState(game.mainImage)
 
-
   return (
-    <div className="relative flex w-full h-auto" style={{ minWidth: '0' }}>
-      <div className="flex w-full aspect-[25/10]">
-        {/* Left side - Main image (66.66%) */}
-        <div className="relative w-[66.66%]" style={{ minWidth: '0' }}>
-          <Image
-            src={activeImage}
-            alt={game.title}
-            fill
-            className="object-cover"
-            priority
-          />
-          {/* Title and Platform container */}
-          <div
-            className="absolute bottom-0 left-0 right-0 p-[5%] bg-gradient-to-t from-black/80 via-black/40 to-transparent">
-            <h2 className="fluid-max-32 font-bold text-text-primary mb-[1%] truncate">
-              {game.title}
-            </h2>
-            {/* Platform icons */}
+    <Link href={`/games/${game.slug}`} className="block w-full hover:opacity-95 transition-opacity">
+      <div className="relative flex w-full h-auto" style={{ minWidth: '0' }}>
+        <div className="flex w-full aspect-[25/10]">
+          {/* Left side - Main image (66.66%) */}
+          <div className="relative w-[66.66%]" style={{ minWidth: '0' }}>
+            <Image
+              src={activeImage}
+              alt={game.title}
+              fill
+              className="object-cover"
+              priority
+            />
+            {/* Title and Platform container */}
+            <div
+              className="absolute bottom-0 left-0 right-0 p-[5%] bg-gradient-to-t from-black/80 via-black/40 to-transparent">
+              <h2 className="fluid-max-32 font-bold text-text-primary mb-[1%] truncate">
+                {game.title}
+              </h2>
+              {/* Platform icons */}
+              <div className="flex gap-[1%]">
+                {game.platforms.map((platform: PlatformInfo, idx) => (
+                  <div key={idx} className="w-[2.5%] aspect-square relative">
+                    <Image
+                      src={`/platform_icons/${getPlatformIconSlug(platform.name)}.svg`}
+                      alt={platform.name}
+                      fill
+                      className="object-contain"
+                      unoptimized
+                    />
+                  </div>
+                ))}
+              </div>
+            </div>
+          </div>
 
-            <div className="flex gap-[1%]">
-              {game.platforms.map((platform: PlatformInfo, idx) => (
-                <div key={idx} className="w-[2.5%] aspect-square relative">
+          {/* Right side - Info (33.33%) */}
+          <div className="relative w-[33.33%] flex flex-col bg-bg-nav p-[3%]" style={{ minWidth: '0' }}>
+            {/* Thumbnails */}
+            <div className="grid grid-cols-2 gap-[7%2%]">
+              {game.thumbnails.slice(0, 4).map((thumb, idx) => (
+                <button
+                  key={idx}
+                  className="relative aspect-video overflow-hidden hover:ring-1 hover:ring-text-primary transition-all"
+                  onMouseEnter={() => setActiveImage(thumb)}
+                  onMouseLeave={() => setActiveImage(game.mainImage)}
+                >
                   <Image
-                    src={`/platform_icons/${getPlatformIconSlug(platform.name)}.svg`}
-                    alt={platform.name}
+                    src={thumb}
+                    alt={`${game.title} screenshot ${idx + 1}`}
                     fill
-                    className="object-contain"
-                    unoptimized
+                    className="object-cover"
                   />
-                </div>
+                </button>
+              ))}
+            </div>
+
+            {/* Description */}
+            <div className="mt-[7%]">
+              <p className="fluid-max-14 text-text-primary line-clamp-4">
+                {decodeHTMLEntities(game.description)}
+              </p>
+            </div>
+
+            {/* Score Bar */}
+            <div className="mt-[5%]">
+              <div className="h-[0.4cqw] w-full rounded-full bg-accent-primary">
+                <div
+                  className="h-full rounded-full bg-rating-success transition-all"
+                  style={{ width: `${game.score}%` }}
+                />
+              </div>
+            </div>
+
+            {/* Genre tags */}
+            <div className="flex flex-wrap justify-center gap-[2%] mt-[5%] overflow-hidden">
+              {game.genres.slice(0, 10).map((genre) => (
+                <span
+                  key={genre}
+                  className="rounded-full bg-accent-primary px-[3%] py-[1%] mb-[3%] fluid-max-12 text-text-primary whitespace-nowrap"
+                >
+                  {genre}
+                </span>
               ))}
             </div>
           </div>
         </div>
-
-        {/* Right side - Info (33.33%) */}
-        <div className="relative w-[33.33%] flex flex-col bg-bg-nav p-[3%]" style={{ minWidth: '0' }}>
-          {/* Thumbnails */}
-          <div className="grid grid-cols-2 gap-[7%2%]">
-            {game.thumbnails.slice(0, 4).map((thumb, idx) => (
-              <button
-                key={idx}
-                className="relative aspect-video overflow-hidden hover:ring-1 hover:ring-text-primary transition-all"
-                onMouseEnter={() => setActiveImage(thumb)}
-                onMouseLeave={() => setActiveImage(game.mainImage)}
-              >
-                <Image
-                  src={thumb}
-                  alt={`${game.title} screenshot ${idx + 1}`}
-                  fill
-                  className="object-cover"
-                />
-              </button>
-            ))}
-          </div>
-
-          {/* Description */}
-          <div className="mt-[7%]">
-            <p className="fluid-max-14 text-text-primary line-clamp-4">
-              {decodeHTMLEntities(game.description)}
-            </p>
-          </div>
-
-          {/* Score Bar */}
-          <div className="mt-[5%]">
-            <div className="h-[0.4cqw] w-full rounded-full bg-accent-primary">
-              <div
-                className="h-full rounded-full bg-rating-success transition-all"
-                style={{ width: `${game.score}%` }}
-              />
-            </div>
-          </div>
-
-          {/* Genre tags */}
-          <div className="flex flex-wrap justify-center gap-[2%] mt-[5%] overflow-hidden">
-            {game.genres.slice(0, 10).map((genre) => (
-              <span
-                key={genre}
-                className="rounded-full bg-accent-primary px-[3%] py-[1%] mb-[3%] fluid-max-12 text-text-primary whitespace-nowrap"
-              >
-                {genre}
-              </span>
-            ))}
-          </div>
-        </div>
       </div>
-    </div>
+    </Link>
   )
 }
+
 const EmblaCarousel: React.FC<CarouselProps> = (props) => {
   const { games, options, className } = props
 

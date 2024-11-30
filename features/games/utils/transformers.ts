@@ -8,6 +8,7 @@ export function transformIGDBGame(game: IGDBGame): TransformedGame {
   return {
     id: game.id.toString(),
     title: game.name,
+    slug: game.slug,
     description: game.summary || '',
     mainImage: game.cover?.url || '/placeholder.png',
     thumbnails: [],
@@ -41,6 +42,7 @@ export function transformRAWGGame(game: RAWGGame): ExtendedGameData {
     id: game.id.toString(),
     rawgId: game.id,
     title: game.name,
+    slug: game.slug,
     description: game.description || '',
     mainImage: game.background_image || '/placeholder.png',
     thumbnails: [

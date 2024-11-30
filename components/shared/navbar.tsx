@@ -25,19 +25,23 @@ const Navbar = () => {
         <div className="flex w-72 items-center justify-between">
           {/* Logo */}
           <div className="w-10">
-            <Image
-              src="/ludolex_logo.svg"
-              alt="LUDOLEX Logo"
-              width={40}
-              height={40}
-              className="object-contain"
-            />
+            <Link href={'/'}>
+              <Image
+                src="/ludolex_logo.svg"
+                alt="LUDOLEX Logo"
+                width={40}
+                height={40}
+                className="object-contain"
+              />
+            </Link>
           </div>
 
           {/* Title */}
-          <span className="fluid-max-32 font-semibold tracking-widest text-text-primary whitespace-nowrap">
+          <a className="fluid-max-32 font-semibold tracking-widest text-text-primary whitespace-nowrap"
+             href="/"
+          >
             L U D O L E X
-          </span>
+          </a>
         </div>
 
         {/* Search Bar with User Menu */}
@@ -56,14 +60,16 @@ const Navbar = () => {
                 <>
                   <button className="relative p-2 text-text-primary transition-colors hover:text-text-primary">
                     <Bell className="h-5 w-5" />
-                    <span className="absolute -right-0.5 -top-0.5 flex h-4 w-4 items-center justify-center rounded-full bg-destructive fluid-max-14 font-medium text-white">
+                    <span
+                      className="absolute -right-0.5 -top-0.5 flex h-4 w-4 items-center justify-center rounded-full bg-destructive fluid-max-14 font-medium text-white">
                       3
                     </span>
                   </button>
 
                   <DropdownMenu>
                     <DropdownMenuTrigger className="focus:outline-none">
-                      <div className="flex h-8 w-8 items-center justify-center rounded-full bg-accent-primary fluid-max-14 font-medium text-text-primary transition-colors hover:bg-accent-secondary">
+                      <div
+                        className="flex h-8 w-8 items-center justify-center rounded-full bg-accent-primary fluid-max-14 font-medium text-text-primary transition-colors hover:bg-accent-secondary">
                         {session.user.email?.[0]?.toUpperCase() || 'U'}
                       </div>
                     </DropdownMenuTrigger>

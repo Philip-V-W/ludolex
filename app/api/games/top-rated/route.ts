@@ -20,6 +20,7 @@ export async function GET() {
       const transformedGames = cachedGames.map(game => ({
         id: String(game.id),
         title: game.title,
+        slug: game.slug,
         mainImage: game.mainImage || '/placeholder.png',
         platforms: game.platforms.map(p => ({
           name: p.platform.name,
@@ -39,6 +40,7 @@ export async function GET() {
       .map(game => ({
         id: String(game.id),
         title: game.title,
+        slug: game.slug,
         mainImage: game.mainImage || '/placeholder.png',
         platforms: game.platforms.map(p => ({
           name: p.platform.name,

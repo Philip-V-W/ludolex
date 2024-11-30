@@ -97,7 +97,7 @@ export default function GameMediaSection({ slug }: GameMediaSectionProps) {
   if (!media.length) return null
 
   return (
-    <section className="relative w-full min-w-0 max-w-[1920px] mt-[-1%]">
+    <section className="relative w-full min-w-0 max-w-[1920px]">
       <div className="flex items-center gap-2 fluid-max-16 text-text-secondary mb-4">
         <a href="/games" className="hover:text-text-primary transition-colors">
           Games

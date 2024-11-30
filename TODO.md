@@ -5,7 +5,9 @@
 - [ ] fix auth routes to not be accessible when logged in
 - [ ] change metacritic rating to user rating
 - [ ] implement tags for GameDetailsSection
-
+- [ ] game details is fetching the 1st image 3 times
+- [ ] fresh data isn't being fetched in game details if the game was already fetched during the home page load
+- [ ] replace loading text with an actual loading spinner
 
 ## Low Priority
 

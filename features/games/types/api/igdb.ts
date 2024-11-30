@@ -1,3 +1,8 @@
+export interface IGDBAccessToken {
+  access_token: string;
+  expires_in: number;
+}
+
 export interface IGDBCompany {
   id: number
   name: string

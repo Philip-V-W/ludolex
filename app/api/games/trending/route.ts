@@ -24,6 +24,7 @@ export async function GET() {
       const transformedGames = cachedGames.map(game => ({
         id: String(game.id),
         title: game.title,
+        slug: game.slug,
         description: stripHtml(game.description || ''),
         mainImage: game.mainImage || '/placeholder.png',
         thumbnails: game.screenshots || [],
@@ -46,6 +47,7 @@ export async function GET() {
       .map(game => ({
         id: String(game!.id),
         title: game!.title,
+        slug: game!.slug,
         description: stripHtml(game!.description || ''),
         mainImage: game!.mainImage || '/placeholder.png',
         thumbnails: game!.screenshots || [],

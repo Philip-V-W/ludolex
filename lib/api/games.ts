@@ -107,7 +107,7 @@ export async function getGame(identifier: string | number): Promise<ExtendedGame
   }
 }
 
-export async function getTrendingGames(): Promise<TransformedGame[]> {
+export async function getTrendingGames(): Promise<ExtendedGameData[]> {
   try {
     const today = new Date()
     const thirtyDaysAgo = new Date(today.setDate(today.getDate() - 30))

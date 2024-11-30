@@ -9,6 +9,7 @@ export interface CompanyData {
 export interface BaseGame {
   id: string
   title: string
+  slug: string
   description: string
   mainImage: string | null
   thumbnails?: string[]
@@ -27,6 +28,7 @@ export interface BaseGame {
 export interface TransformedGame extends BaseGame {
   id: string
   title: string
+  slug: string
   description: string
   mainImage: string | null
   thumbnails?: string[]

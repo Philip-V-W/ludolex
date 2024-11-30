@@ -27,6 +27,7 @@ export async function GET() {
       const transformedGames: RecommendedGame[] = cachedGames.map(game => ({
         id: String(game.id),
         title: game.title,
+        slug: game.slug,
         image: game.mainImage || '/placeholder.png',
         releaseDate: game.releaseDate ? new Date(game.releaseDate).toLocaleDateString() : 'TBA',
         platforms: game.platforms.map(p => p.platform.slug),
@@ -45,6 +46,7 @@ export async function GET() {
       .map(game => ({
         id: String(game!.id),
         title: game!.title,
+        slug: game!.slug,
         image: game!.mainImage || '/placeholder.png',
         releaseDate: game!.releaseDate ? new Date(game!.releaseDate).toLocaleDateString() : 'TBA',
         platforms: game!.platforms.map(p => p.platform.slug),

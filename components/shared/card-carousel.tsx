@@ -6,10 +6,12 @@ import useEmblaCarousel from 'embla-carousel-react'
 import { cn } from '@/lib/utils'
 import Image from 'next/image'
 import { getPlatformIconSlug, PlatformInfo } from '@/features/games/utils/platforms'
+import Link from 'next/link'
 
 export type TopRated = {
   id: string
   title: string
+  slug: string
   mainImage: string
   score: number
   platforms: PlatformInfo[]
@@ -64,40 +66,42 @@ const usePrevNextButtons = (
 // Game Card Component
 const GameCard: React.FC<{ game: TopRated }> = ({ game }) => {
   return (
-    <div
-      className="relative aspect-[4/3] overflow-hidden rounded-lg sm:rounded-xl md:rounded-1xl lg:rounded-2xl bg-bg-nav hover:scale-105 transition-transform">
-      <Image
-        src={game.mainImage || '/placeholder.png'}
-        alt={game.title}
-        fill
-        className="object-cover"
-      />
-      <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent" />
+    <Link href={`/games/${game.slug}`} className="block w-full hover:opacity-95 transition-opacity">
+      <div
+        className="relative aspect-[4/3] overflow-hidden rounded-lg sm:rounded-xl md:rounded-1xl lg:rounded-2xl bg-bg-nav hover:scale-105 transition-transform">
+        <Image
+          src={game.mainImage || '/placeholder.png'}
+          alt={game.title}
+          fill
+          className="object-cover"
+        />
+        <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent" />
 
-      {/* Title and platforms */}
-      <div className="absolute bottom-0 left-0 right-0 p-[5%]">
-        <h3 className="fluid-max-16 font-semibold text-text-primary mb-[2%]">{game.title}</h3>
-        <div className="flex items-center gap-[2%]">
-          {game.platforms.map((platform, idx) => (
-            <div key={idx} className="w-[6%] aspect-square relative">
-              <Image
-                src={`/platform_icons/${getPlatformIconSlug(platform.name)}.svg`}
-                alt={platform.name}
-                fill
-                className="object-contain"
-                unoptimized
-              />
-            </div>
-          ))}
+        {/* Title and platforms */}
+        <div className="absolute bottom-0 left-0 right-0 p-[5%]">
+          <h3 className="fluid-max-16 font-semibold text-text-primary mb-[2%]">{game.title}</h3>
+          <div className="flex items-center gap-[2%]">
+            {game.platforms.map((platform, idx) => (
+              <div key={idx} className="w-[6%] aspect-square relative">
+                <Image
+                  src={`/platform_icons/${getPlatformIconSlug(platform.name)}.svg`}
+                  alt={platform.name}
+                  fill
+                  className="object-contain"
+                  unoptimized
+                />
+              </div>
+            ))}
+          </div>
+        </div>
+
+        {/* Score */}
+        <div
+          className="absolute bottom-[5%] right-[5%] bg-rating-success rounded-full w-[12%] aspect-square flex items-center justify-center">
+          <span className="fluid-max-14 font-medium text-text-primary">{game.score}</span>
         </div>
       </div>
-
-      {/* Score */}
-      <div
-        className="absolute bottom-[5%] right-[5%] bg-rating-success rounded-full w-[12%] aspect-square flex items-center justify-center">
-        <span className="fluid-max-14 font-medium text-text-primary">{game.score}</span>
-      </div>
-    </div>
+    </Link>
   )
 }
 // Main Carousel Component
