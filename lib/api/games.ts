@@ -166,13 +166,18 @@ export async function getGame(identifier: string | number): Promise<ExtendedGame
 export async function getTrendingGames(): Promise<ExtendedGameData[]> {
   try {
     const today = new Date()
-    const thirtyDaysAgo = new Date(today.setDate(today.getDate() - 30))
-    const dateRange = `${thirtyDaysAgo.toISOString().split('T')[0]},${new Date().toISOString().split('T')[0]}`
+    const thirtyDaysAgo = new Date(today)
+    thirtyDaysAgo.setDate(thirtyDaysAgo.getDate() - 90)
+
+    const dateRange = `${thirtyDaysAgo.toISOString().split('T')[0]},${today.toISOString().split('T')[0]}`
+
 
     const response = await rawgClient.fetch<RAWGResponse<RAWGGame>>('games', {
-      ordering: '-relevance',
+      ordering: '-relevance,-added',
       dates: dateRange,
       page_size: '10',
+      parent_platforms: '1,2,3',
+      exclude_additions: 'true',
     })
 
     if (!response?.results?.length) {
@@ -183,7 +188,6 @@ export async function getTrendingGames(): Promise<ExtendedGameData[]> {
       response.results.map(async game => {
         try {
           const details = await rawgClient.fetch<RAWGGameDetails>(`games/${game.id}`)
-
           const screenshots = await rawgClient.fetch<{ results: { image: string }[] }>(
             `games/${game.id}/screenshots`,
           )

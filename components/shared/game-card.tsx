@@ -56,16 +56,21 @@ const GameCard = ({
             <div className="space-y-[4%]">
               {/* Platform Icons */}
               <div className="flex gap-[4%]">
-                {platforms.map((platform, idx) => (
-                  <div key={idx} className="w-[9%] aspect-square relative">
-                    <Image
-                      src={`/platform_icons/${platform}.svg`}
-                      alt={platform}
-                      fill
-                      className="object-contain"
-                    />
-                  </div>
-                ))}
+                {platforms
+                  .filter(platform => platform && true)
+                  .map((platform, idx) => (
+                    <div key={idx} className="w-[9%] aspect-square relative">
+                      <Image
+                        src={`/platform_icons/${platform}.svg`}
+                        alt={platform}
+                        fill
+                        className="object-contain"
+                        onError={(e) => {
+                          (e.target as HTMLImageElement).src = '/platform_icons/unknown.svg'
+                        }}
+                      />
+                    </div>
+                  ))}
               </div>
 
               {/* Title */}

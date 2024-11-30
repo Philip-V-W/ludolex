@@ -67,18 +67,29 @@ export function transformRAWGGame(game: RAWGGame): ExtendedGameData {
     },
   })) || []
 
-  // Transform the screenshots/thumbnails
-  const thumbnails = [
-    game.background_image,
-    ...(game.short_screenshots?.map(s => s.image) || []),
-  ].filter(Boolean) as string[]
-
   // Transform platforms with requirements
   const platforms = game.platforms?.map(p => ({
     name: p.platform.name,
     slug: p.platform.slug,
     requirements: p.requirements || undefined,
   })) || []
+
+  const genres = game.genres?.map(g => ({
+    name: g.name,
+    slug: g.slug,
+  })) || []
+
+  const mainImage = game.background_image || '/placeholder.png'
+  const uniqueScreenshots = game.short_screenshots?.reduce<string[]>((acc, screenshot) => {
+    const imageUrl = screenshot.image
+    if (imageUrl && !acc.includes(imageUrl) && imageUrl !== mainImage) {
+      acc.push(imageUrl)
+    }
+    return acc
+  }, [mainImage]) || [mainImage]
+
+  // Convert rating to a 0-100 scale if metacritic is not available
+  const normalizedRating = game.rating ? Math.round(game.rating * 20) : 0 // RAWG ratings are 0-5, multiply by 20 to get 0-100
 
   return {
     id: game.id.toString(),
@@ -87,11 +98,11 @@ export function transformRAWGGame(game: RAWGGame): ExtendedGameData {
     title: game.name,
     slug: game.slug,
     description: game.description || '',
-    mainImage: game.background_image || '/placeholder.png',
-    thumbnails,
+    mainImage,
+    thumbnails: uniqueScreenshots,
     platforms,
-    genres: game.genres?.map(g => g.name) || [],
-    score: game.metacritic || 0,
+    genres: genres.map(g => g.name),
+    score: game.metacritic || normalizedRating || 0,
     rating: game.rating,
     releaseDate: game.released || null,
     ageRating: game.esrb_rating?.id || null,

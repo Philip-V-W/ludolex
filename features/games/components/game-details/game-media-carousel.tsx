@@ -152,18 +152,16 @@ export default function GameMediaCarousel({
       {/* Thumbnails */}
       <ScrollArea className="w-full whitespace-nowrap mt-[1%]" style={{ minWidth: '0' }}>
         <div className="flex gap-[1%] pb-[1.5%] w-full" style={{ minWidth: '0' }}>
-          {initialMedia.map((item, index) => (
+          {initialMedia.slice(1).map((item, index) => (
             <Thumbnail
               key={item.id}
               item={item}
-              isSelected={index === selectedIndex}
-              onClick={() => onThumbClick(index)}
+              isSelected={index + 1 === selectedIndex}
+              onClick={() => onThumbClick(index + 1)}
             />
           ))}
         </div>
-        <ScrollBar
-          orientation="horizontal"
-        />
+        <ScrollBar orientation="horizontal" />
       </ScrollArea>
     </div>
   )

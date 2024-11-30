@@ -6,7 +6,7 @@ const CACHE_DURATION = 24 * 60 * 60 * 1000 // 24 hours
 
 interface CacheOptions {
   limit?: number
-  orderBy?: Prisma.GameOrderByWithRelationInput
+  orderBy?: Prisma.GameOrderByWithRelationInput[]
   where?: Prisma.GameWhereInput
 }
 
@@ -37,7 +37,7 @@ export type GameWithIncludes = Prisma.GameGetPayload<{
 
 // Retrieves games from the database that have been cached recently
 export async function getCachedGames(options: CacheOptions = {}): Promise<GameWithIncludes[]> {
-  const { limit = 10, orderBy = { releaseDate: 'desc' }, where = {} } = options
+  const { limit = 10, orderBy = [{ releaseDate: 'desc' }], where = {} } = options
 
   return prisma.game.findMany({
     where: {
@@ -47,6 +47,10 @@ export async function getCachedGames(options: CacheOptions = {}): Promise<GameWi
       AND: {
         mainImage: {
           not: null,
+        },
+        releaseDate: {
+          not: null,
+          lte: new Date(),
         },
         ...where,
       },
@@ -175,7 +179,7 @@ export async function cacheGames(
           description: stripHtml(game.description),
           mainImage: game.mainImage,
           screenshots: game.thumbnails ?? [],
-          metacritic: game.score ?? undefined,
+          metacritic: game.score ?? null,
           lastFetched: new Date(),
           rawgId: game.rawgId ?? null,
           releaseDate: game.releaseDate ? new Date(game.releaseDate) : null,
@@ -193,10 +197,22 @@ export async function cacheGames(
           create: createInput,
           update: {
             ...createInput,
-            platforms: undefined,
-            genres: undefined,
-            gameStore: undefined,
-            companies: undefined,
+            platforms: {
+              deleteMany: {},
+              create: platformsCreate.create,
+            },
+            genres: {
+              deleteMany: {},
+              create: genresCreate.create,
+            },
+            gameStore: {
+              deleteMany: {},
+              create: storesCreate.create,
+            },
+            companies: {
+              deleteMany: {},
+              create: companiesCreate.create,
+            },
           },
           include: {
             platforms: {

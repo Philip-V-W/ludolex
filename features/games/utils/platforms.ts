@@ -7,6 +7,8 @@ export const PLATFORM_SLUG_MAP: Record<string, string> = {
   'Nintendo Switch': 'nintendo-switch',
   'iOS': 'ios',
   'Android': 'android',
+  'macOS': 'macos',
+  'Linux': 'linux',
 }
 
 export type PlatformInfo = {

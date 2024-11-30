@@ -108,6 +108,7 @@ const DotButton: React.FC<ComponentPropsWithRef<'button'> & { isFirst?: boolean;
   )
 }
 
+
 const GameSlide: React.FC<{ game: CarouselGame }> = ({ game }) => {
   const [activeImage, setActiveImage] = useState(game.mainImage)
 
@@ -132,17 +133,22 @@ const GameSlide: React.FC<{ game: CarouselGame }> = ({ game }) => {
               </h2>
               {/* Platform icons */}
               <div className="flex gap-[1%]">
-                {game.platforms.map((platform: PlatformInfo, idx) => (
-                  <div key={idx} className="w-[2.5%] aspect-square relative">
-                    <Image
-                      src={`/platform_icons/${getPlatformIconSlug(platform.name)}.svg`}
-                      alt={platform.name}
-                      fill
-                      className="object-contain"
-                      unoptimized
-                    />
-                  </div>
-                ))}
+                {game.platforms
+                  .filter(platform => platform.name && true)
+                  .map((platform: PlatformInfo, idx) => (
+                    <div key={idx} className="w-[2.5%] aspect-square relative">
+                      <Image
+                        src={`/platform_icons/${getPlatformIconSlug(platform.name)}.svg`}
+                        alt={platform.name}
+                        fill
+                        className="object-contain"
+                        unoptimized
+                        onError={(e) => {
+                          (e.target as HTMLImageElement).src = '/platform_icons/unknown.svg'
+                        }}
+                      />
+                    </div>
+                  ))}
               </div>
             </div>
           </div>
@@ -151,7 +157,7 @@ const GameSlide: React.FC<{ game: CarouselGame }> = ({ game }) => {
           <div className="relative w-[33.33%] flex flex-col bg-bg-nav p-[3%]" style={{ minWidth: '0' }}>
             {/* Thumbnails */}
             <div className="grid grid-cols-2 gap-[7%2%]">
-              {game.thumbnails.slice(0, 4).map((thumb, idx) => (
+              {game.thumbnails.slice(1, 5).map((thumb, idx) => (
                 <button
                   key={idx}
                   className="relative aspect-video overflow-hidden hover:ring-1 hover:ring-text-primary transition-all"

@@ -5,8 +5,9 @@ import { EmblaCarouselType, EmblaOptionsType } from 'embla-carousel'
 import useEmblaCarousel from 'embla-carousel-react'
 import { cn } from '@/lib/utils'
 import Image from 'next/image'
-import { getPlatformIconSlug, PlatformInfo } from '@/features/games/utils/platforms'
+import { PlatformInfo } from '@/features/games/utils/platforms'
 import Link from 'next/link'
+import { PlatformIcons } from '@/components/shared/platform-icons'
 
 export type TopRated = {
   id: string
@@ -65,6 +66,10 @@ const usePrevNextButtons = (
 
 // Game Card Component
 const GameCard: React.FC<{ game: TopRated }> = ({ game }) => {
+  // Ignore platforms filter without a name
+  const validPlatforms = game.platforms.filter(platform =>
+    platform.name && true,
+  )
   return (
     <Link href={`/games/${game.slug}`} className="block w-full hover:opacity-95 transition-opacity">
       <div
@@ -81,16 +86,8 @@ const GameCard: React.FC<{ game: TopRated }> = ({ game }) => {
         <div className="absolute bottom-0 left-0 right-0 p-[5%]">
           <h3 className="fluid-max-16 font-semibold text-text-primary mb-[2%]">{game.title}</h3>
           <div className="flex items-center gap-[2%]">
-            {game.platforms.map((platform, idx) => (
-              <div key={idx} className="w-[6%] aspect-square relative">
-                <Image
-                  src={`/platform_icons/${getPlatformIconSlug(platform.name)}.svg`}
-                  alt={platform.name}
-                  fill
-                  className="object-contain"
-                  unoptimized
-                />
-              </div>
+            {validPlatforms.map((platform, idx) => (
+              <PlatformIcons key={idx} platform={platform} />
             ))}
           </div>
         </div>
@@ -104,6 +101,7 @@ const GameCard: React.FC<{ game: TopRated }> = ({ game }) => {
     </Link>
   )
 }
+
 // Main Carousel Component
 const CardCarousel: React.FC<CarouselProps> = (props) => {
   const { games, options, className } = props
@@ -122,27 +120,21 @@ const CardCarousel: React.FC<CarouselProps> = (props) => {
   } = usePrevNextButtons(emblaApi)
 
   return (
-    <div className={cn(
-      'w-[100%] max-w-[1920px] mx-auto relative',
-      className,
-    )} style={{ minWidth: '0' }}>
+    <div className={cn('w-[100%] max-w-[1920px] mx-auto relative', className)}
+         style={{ minWidth: '0' }}>
       {/* Carousel Container */}
       <div className="overflow-hidden rounded-lg sm:rounded-xl md:rounded-1xl lg:rounded-2xl w-full"
            style={{ minWidth: '0' }} ref={emblaRef}>
         <div className="flex gap-[1%]" style={{ minWidth: '0' }}>
           {games.map((game) => (
-            <div
-              key={game.id}
-              className="flex-[0_0_19%]"
-              style={{ minWidth: '0' }}
-            >
+            <div key={game.id} className="flex-[0_0_19%]" style={{ minWidth: '0' }}>
               <GameCard game={game} />
             </div>
           ))}
         </div>
       </div>
 
-      {/* Navigation Buttons */}
+      {/* Navigation buttons */}
       <button
         onClick={onPrevButtonClick}
         disabled={prevBtnDisabled}
