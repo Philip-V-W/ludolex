@@ -164,7 +164,7 @@ export default function GameSideDetails({ slug }: GameSideDetailsProps) {
       )}
 
       {/* Languages */}
-      {data.supportedLanguages.length > 0 && (
+      {data.supportedLanguages && (
         <section>
           <h3 className="fluid-max-18 font-semibold text-text-primary mb-2">
             Supported Language{publishers.length > 1 ? 's' : ''}
