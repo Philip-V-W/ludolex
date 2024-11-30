@@ -16,7 +16,7 @@ const resetSchema = z.object({
     .max(100)
     .regex(
       /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)/,
-      'Password must contain at least one uppercase letter, one lowercase letter, and one number'
+      'Password must contain at least one uppercase letter, one lowercase letter, and one number',
     ),
 })
 
@@ -26,10 +26,10 @@ export async function POST(req: Request) {
     const result = requestResetSchema.safeParse(body)
 
     if (!result.success) {
-      return NextResponse.json(
-        { error: result.error.issues[0].message },
-        { status: 400 }
-      )
+      if (!result.success) {
+        const errorMessage = result.error?.issues?.[0]?.message || 'Invalid input'
+        return NextResponse.json({ error: errorMessage }, { status: 400 })
+      }
     }
 
     const { email } = result.data
@@ -41,7 +41,7 @@ export async function POST(req: Request) {
     if (!user) {
       return NextResponse.json(
         { message: 'If an account exists, a reset link has been sent' },
-        { status: 200 }
+        { status: 200 },
       )
     }
 
@@ -62,13 +62,13 @@ export async function POST(req: Request) {
         message: 'Reset token generated',
         resetToken, // In production, this would be sent via email
       },
-      { status: 200 }
+      { status: 200 },
     )
   } catch (error) {
     console.error('Reset password error:', error)
     return NextResponse.json(
       { error: 'Internal server error' },
-      { status: 500 }
+      { status: 500 },
     )
   }
 }
@@ -79,10 +79,10 @@ export async function PUT(req: Request) {
     const result = resetSchema.safeParse(body)
 
     if (!result.success) {
-      return NextResponse.json(
-        { error: result.error.issues[0].message },
-        { status: 400 }
-      )
+      if (!result.success) {
+        const errorMessage = result.error?.issues?.[0]?.message || 'Invalid input'
+        return NextResponse.json({ error: errorMessage }, { status: 400 })
+      }
     }
 
     const { token, password } = result.data
@@ -99,7 +99,7 @@ export async function PUT(req: Request) {
     if (!user) {
       return NextResponse.json(
         { error: 'Invalid or expired reset token' },
-        { status: 400 }
+        { status: 400 },
       )
     }
 
@@ -116,13 +116,13 @@ export async function PUT(req: Request) {
 
     return NextResponse.json(
       { message: 'Password updated successfully' },
-      { status: 200 }
+      { status: 200 },
     )
   } catch (error) {
     console.error('Reset password error:', error)
     return NextResponse.json(
       { error: 'Internal server error' },
-      { status: 500 }
+      { status: 500 },
     )
   }
 }

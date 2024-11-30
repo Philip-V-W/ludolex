@@ -5,6 +5,7 @@ import Link from 'next/link'
 import Image from 'next/image'
 import { usePathname } from 'next/navigation'
 import { Sheet, SheetContent, SheetTrigger } from '@/components/ui/sheet'
+import { useSession } from 'next-auth/react'
 
 interface NavItemProps {
   href: string
@@ -90,6 +91,7 @@ const NavSection = ({
 )
 
 const NavContent = () => {
+  const { data: session } = useSession()
   const pathname = usePathname()
 
   return (
@@ -106,40 +108,52 @@ const NavContent = () => {
       </NavSection>
 
       {/* User Collections */}
-      <NavSection>
-        <NavItem
-          href="/username"
-          label="Username"
-          isActive={pathname === '/username'}
-          size="large"
-          showIcon={false}
-        />
-        <NavItem
-          href="/library"
-          label="My Library"
-          isActive={pathname === '/library'}
-        />
-        <NavItem
-          href="/wishlist"
-          label="Wishlist"
-          isActive={pathname === '/wishlist'}
-        />
-        <NavItem
-          href="/reviews"
-          label="My Reviews"
-          isActive={pathname === '/reviews'}
-        />
-        <NavItem
-          href="/friends"
-          label="Friends List"
-          isActive={pathname === '/friends'}
-        />
-        <NavItem
-          href="/settings"
-          label="Settings"
-          isActive={pathname === '/settings'}
-        />
-      </NavSection>
+      {session ? (
+        <NavSection>
+          <NavItem
+            href={`/profile/${session.user.username}`}
+            label={session.user.username.charAt(0).toUpperCase() + session.user.username.slice(1)}
+            isActive={pathname === `/profile/${session.user.username}`}
+            size="large"
+            showIcon={false}
+          />
+          <NavItem
+            href="/library"
+            label="My Library"
+            isActive={pathname === '/library'}
+          />
+          <NavItem
+            href="/wishlist"
+            label="Wishlist"
+            isActive={pathname === '/wishlist'}
+          />
+          <NavItem
+            href="/reviews"
+            label="My Reviews"
+            isActive={pathname === '/reviews'}
+          />
+          <NavItem
+            href="/friends"
+            label="Friends List"
+            isActive={pathname === '/friends'}
+          />
+          <NavItem
+            href="/settings"
+            label="Settings"
+            isActive={pathname === '/settings'}
+          />
+        </NavSection>
+      ) : (
+        <NavSection>
+          <NavItem
+            href="/login"
+            label="Login"
+            isActive={pathname === '/login'}
+            size="large"
+            showIcon={false}
+          />
+        </NavSection>
+      )}
 
       {/* Search Section */}
       <NavSection>

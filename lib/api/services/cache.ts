@@ -1,6 +1,6 @@
 import { prisma } from '@/lib/db/prisma'
 import { Prisma } from '@prisma/client'
-import { ExtendedTransformedGame } from '@/features/games/types/api/games'
+import { ExtendedGameData } from '@/features/games/types/api/games'
 
 const CACHE_DURATION = 24 * 60 * 60 * 1000 // 24 hours
 
@@ -80,7 +80,7 @@ export async function getCachedGames(options: CacheOptions = {}): Promise<GameWi
 
 // Caches games data in the database
 export async function cacheGames(
-  games: ExtendedTransformedGame[],
+  games: ExtendedGameData [],
   stripHtml: (html: string) => string,
 ): Promise<(GameWithIncludes | null)[]> {
   return Promise.all(

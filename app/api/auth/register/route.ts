@@ -11,7 +11,7 @@ const registerSchema = z.object({
     .max(100)
     .regex(
       /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)/,
-      'Password must contain at least one uppercase letter, one lowercase letter, and one number'
+      'Password must contain at least one uppercase letter, one lowercase letter, and one number',
     ),
   username: z
     .string()
@@ -19,7 +19,7 @@ const registerSchema = z.object({
     .max(20)
     .regex(
       /^[a-zA-Z0-9_-]+$/,
-      'Username can only contain letters, numbers, underscores, and hyphens'
+      'Username can only contain letters, numbers, underscores, and hyphens',
     ),
 })
 
@@ -29,10 +29,10 @@ export async function POST(req: Request) {
     const result = registerSchema.safeParse(body)
 
     if (!result.success) {
-      return NextResponse.json(
-        { error: result.error.issues[0].message },
-        { status: 400 }
-      )
+      if (!result.success) {
+        const errorMessage = result.error?.issues?.[0]?.message || 'Invalid input'
+        return NextResponse.json({ error: errorMessage }, { status: 400 })
+      }
     }
 
     const { email, password, username } = result.data
@@ -47,7 +47,7 @@ export async function POST(req: Request) {
     if (existingUser) {
       return NextResponse.json(
         { error: 'Email or username already exists' },
-        { status: 409 }
+        { status: 409 },
       )
     }
 
@@ -72,7 +72,7 @@ export async function POST(req: Request) {
     console.error('Registration error:', error)
     return NextResponse.json(
       { error: 'Internal server error' },
-      { status: 500 }
+      { status: 500 },
     )
   }
 }

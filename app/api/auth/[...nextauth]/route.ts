@@ -4,8 +4,8 @@ import CredentialsProvider from 'next-auth/providers/credentials'
 import { prisma } from '@/lib/db/prisma'
 import { compare } from 'bcrypt'
 import NextAuth from 'next-auth'
-import {Adapter} from "next-auth/adapters";
-import {AuthUser} from "@/features/auth/types";
+import { Adapter } from 'next-auth/adapters'
+import { AuthUser } from '@/features/auth/types'
 
 export const authOptions: NextAuthOptions = {
   adapter: PrismaAdapter(prisma) as Adapter,
@@ -49,7 +49,7 @@ export const authOptions: NextAuthOptions = {
 
         // Return type matching AuthUser
         return {
-          id: user.id,
+          id: user.id.toString(),
           email: user.email,
           username: user.username,
         } as AuthUser

@@ -1,42 +1,98 @@
 import { igdbClient } from './igdb'
 import { rawgClient } from './rawg'
-import {
-  IGDBGame,
-  RAWGGame,
-  RAWGGameDetails,
-  RAWGResponse,
-} from '@/features/games/types'
-import {
-  transformIGDBGame,
-  transformRAWGGame,
-} from '@/features/games/utils/transformers'
-import { CompanyData, ExtendedGameData, TransformedGame } from '@/features/games/types/api/games'
+import { IGDBGame, RAWGGame, RAWGGameDetails, RAWGResponse } from '@/features/games/types'
+import { transformIGDBGame, transformRAWGGame } from '@/features/games/utils/transformers'
+import { CompanyData, ExtendedGameData } from '@/features/games/types/api/games'
 import { CompanyRole } from '@prisma/client'
 
-export async function searchGames(query: string): Promise<TransformedGame[]> {
+export async function searchGames(query: string): Promise<ExtendedGameData []> {
   if (!query.trim()) {
     return []
   }
 
   try {
-    // IGDB Search
-    const igdbQuery = `
-      search "${query.replace(/"/g, '\\"')}";
-      fields name,slug,cover.*,first_release_date,summary,rating,genres.*,platforms.*;
-      limit 10;
-    `
-    const igdbResults = await igdbClient.fetch<IGDBGame[]>('games', igdbQuery)
-    if (igdbResults?.length > 0) {
-      return igdbResults.map(transformIGDBGame)
-    }
-
-    // RAWG Search fallback
+    // RAWG Search first
     const rawgResults = await rawgClient.fetch<RAWGResponse<RAWGGame>>('games', {
       search: query,
       page: '1',
       page_size: '10',
     })
-    return rawgResults?.results?.map(transformRAWGGame) || []
+
+    if (rawgResults?.results?.length > 0) {
+      // Fetch detailed information for each game
+      return await Promise.all(
+        rawgResults.results.map(async game => {
+          try {
+            // Get full game details
+            const details = await rawgClient.fetch<RAWGGameDetails>(`games/${game.id}`)
+
+            // Get screenshots
+            const screenshots = await rawgClient.fetch<{ results: { image: string }[] }>(
+              `games/${game.id}/screenshots`,
+            )
+
+            // Combine all data
+            return transformRAWGGame({
+              ...game,
+              ...details,
+              description: details.description || game.description,
+              short_screenshots: screenshots.results?.map(s => ({
+                id: 0,
+                image: s.image,
+              })) || [],
+            })
+          } catch (error) {
+            console.error(`Error fetching details for game ${game.slug}:`, error)
+            return transformRAWGGame(game)
+          }
+        }),
+      )
+    }
+
+    // IGDB Search fallback
+    const igdbQuery = `
+      search "${query.replace(/"/g, '\\"')}";
+      fields 
+        name,
+        slug,
+        cover.*,
+        first_release_date,
+        summary,
+        rating,
+        genres.*,
+        platforms.*,
+        involved_companies.company.name,
+        involved_companies.company.slug,
+        involved_companies.developer,
+        involved_companies.publisher,
+        involved_companies.porting,
+        language_supports.language.name;
+      limit 10;
+    `
+    const igdbResults = await igdbClient.fetch<IGDBGame[]>('games', igdbQuery)
+    if (!igdbResults?.length) return []
+
+    // Transform and enrich IGDB results
+    return igdbResults.map(game => ({
+      ...transformIGDBGame(game),
+      rawgId: null,
+      igdbId: game.id,
+      releaseDate: game.first_release_date ? new Date(game.first_release_date * 1000).toISOString() : null,
+      ageRating: null,
+      supportedLanguages: game.language_supports?.map(ls => ls.language.name) || [],
+      systemRequirements: null,
+      stores: [],
+      companies: game.involved_companies?.reduce<CompanyData[]>((acc, ic) => {
+        if (ic.developer) acc.push({ name: ic.company.name, slug: ic.company.slug, role: 'DEVELOPER' })
+        if (ic.publisher) acc.push({ name: ic.company.name, slug: ic.company.slug, role: 'PUBLISHER' })
+        if (ic.porting) acc.push({ name: ic.company.name, slug: ic.company.slug, role: 'PORT_DEVELOPER' })
+        return acc
+      }, []) || [],
+      fullVideoUrl: null,
+      previewVideoUrl: null,
+      videoPreview: null,
+    }))
+
   } catch (error) {
     console.error('Error searching games:', error)
     return []

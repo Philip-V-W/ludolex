@@ -46,9 +46,10 @@ export interface TransformedGame extends BaseGame {
 
 export interface ExtendedGameData extends TransformedGame {
   rawgId: number | null
-  igdbId?: number | null
+  igdbId: number | null
   releaseDate: string | null
   ageRating: number | null
+  rating: number | null
   supportedLanguages: string[]
   systemRequirements: Record<string, { minimum?: string; recommended?: string }> | null
   stores?: {
@@ -63,25 +64,4 @@ export interface ExtendedGameData extends TransformedGame {
   fullVideoUrl: string | null
   previewVideoUrl: string | null
   videoPreview: string | null
-}
-
-export interface ExtendedTransformedGame extends TransformedGame {
-  rawgId?: number | null
-  igdbId?: number | null
-  releaseDate: string | null
-  ageRating: number | null
-  supportedLanguages: string[]
-  systemRequirements: Record<string, { minimum?: string; recommended?: string }> | null
-  stores?: {
-    url: string
-    store: {
-      id: number
-      name: string
-      slug: string
-    }
-  }[]
-  companies?: CompanyData[]
-  fullVideoUrl?: string | null
-  previewVideoUrl?: string | null
-  videoPreview?: string | null
 }

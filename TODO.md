@@ -22,6 +22,7 @@
 - [ ] fix getTrendingGames, function is fetching the wrong data
 - [ ] adjust the horizontal scrollbar in the GameMediaSection component
 - [ ] fix the GameMediaCarousel drag scroll
+- [ ] fix store redirection link
 
 ## Future Improvements
 

@@ -1,32 +1,47 @@
-import { NextResponse } from 'next/server'
+import { NextRequest, NextResponse } from 'next/server'
 import { searchGames } from '@/lib/api/games'
-import { cacheGame } from '@/lib/api/services/cache'
+import { getCachedGames, cacheGames } from '@/lib/api/services/cache'
+import { stripHtml } from '@/lib/utils'
 
-export async function GET(request: Request) {
-  const { searchParams } = new URL(request.url)
+export async function GET(request: NextRequest) {
+  const searchParams = request.nextUrl.searchParams
   const query = searchParams.get('q')
 
   if (!query) {
-    return NextResponse.json(
-      { error: 'Query parameter is required' },
-      { status: 400 }
-    )
+    return NextResponse.json({ success: false, error: 'Query is required' }, { status: 400 })
   }
 
   try {
-    const games = await searchGames(query)
-
-    // Cache results in background
-    games.forEach((game) => {
-      cacheGame(game).catch(console.error)
+    const cachedGames = await getCachedGames({
+      where: {
+        title: {
+          contains: query,
+          mode: 'insensitive',
+        },
+      },
+      limit: 5,
     })
 
-    return NextResponse.json(games)
+    if (cachedGames.length >= 3) {
+      return NextResponse.json({
+        success: true,
+        data: cachedGames,
+      })
+    }
+
+    const searchResults = await searchGames(query)
+    const cachedResults = await cacheGames(searchResults, stripHtml)
+
+    return NextResponse.json({
+      success: true,
+      data: cachedResults,
+    })
+
   } catch (error) {
     console.error('Search error:', error)
     return NextResponse.json(
-      { error: 'Failed to search games' },
-      { status: 500 }
+      { success: false, error: 'Failed to search games' },
+      { status: 500 },
     )
   }
 }

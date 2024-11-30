@@ -17,6 +17,7 @@ export interface IGDBGame {
   name: string
   slug: string
   summary?: string
+  first_release_date?: number
   cover?: {
     url: string
   }
