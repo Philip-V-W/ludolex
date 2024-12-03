@@ -67,6 +67,7 @@ export function useAuth(): AuthHookReturn {
         password: data.password,
       })
     } catch (err) {
+      console.error('Register error:', err)
       setError('An unexpected error occurred')
       return false
     } finally {

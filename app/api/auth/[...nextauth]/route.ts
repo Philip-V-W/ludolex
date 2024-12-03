@@ -7,6 +7,7 @@ import NextAuth from 'next-auth'
 import { Adapter } from 'next-auth/adapters'
 import { AuthUser } from '@/features/auth/types'
 
+// Configuration NextAuth.js avec adaptateur Prisma
 export const authOptions: NextAuthOptions = {
   adapter: PrismaAdapter(prisma) as Adapter,
   secret: process.env.NEXTAUTH_SECRET,
@@ -24,6 +25,7 @@ export const authOptions: NextAuthOptions = {
         email: { label: 'Email', type: 'email' },
         password: { label: 'Password', type: 'password' },
       },
+      // Système d'authentification avec validation des credentials
       async authorize(credentials) {
         if (!credentials?.email || !credentials?.password) {
           return null
@@ -32,6 +34,13 @@ export const authOptions: NextAuthOptions = {
         const user = await prisma.user.findUnique({
           where: {
             email: credentials.email,
+          },
+          select: {
+            id: true,
+            role: true,
+            email: true,
+            username: true,
+            password: true,
           },
         })
 
@@ -50,6 +59,7 @@ export const authOptions: NextAuthOptions = {
         // Return type matching AuthUser
         return {
           id: user.id.toString(),
+          role: user.role,
           email: user.email,
           username: user.username,
         } as AuthUser
@@ -60,6 +70,7 @@ export const authOptions: NextAuthOptions = {
     async jwt({ token, user }) {
       if (user) {
         token.id = user.id
+        token.role = user.role
         token.username = user.username
       }
       return token
@@ -70,6 +81,7 @@ export const authOptions: NextAuthOptions = {
         user: {
           ...session.user,
           id: token.id as string,
+          role: token.role as string,
           username: token.username as string,
         },
       }
