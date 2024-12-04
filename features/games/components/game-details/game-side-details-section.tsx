@@ -21,7 +21,7 @@ interface GameSideData {
       icon: string
       url: string
     }[]
-    companies?: CompanyData[]  // Made optional
+    companies?: CompanyData[]
   }
   error?: string
 }
@@ -167,10 +167,10 @@ export default function GameSideDetails({ slug }: GameSideDetailsProps) {
       {data.supportedLanguages && (
         <section>
           <h3 className="fluid-max-18 font-semibold text-text-primary mb-2">
-            Supported Language{publishers.length > 1 ? 's' : ''}
+            Supported Language{data.supportedLanguages.length > 1 ? 's' : ''}
           </h3>
           <div className="text-text-primary text-sm">
-            {data.supportedLanguages.join(', ')}
+            {Array.from(new Set(data.supportedLanguages)).join(', ')}
           </div>
         </section>
       )}

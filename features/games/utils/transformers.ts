@@ -3,6 +3,7 @@ import {
   CompanyData,
   ExtendedGameData,
 } from '@/features/games/types/api/games'
+import { GameWithIncludes } from '@/lib/api/services/cache'
 
 export function transformIGDBGame(game: IGDBGame): ExtendedGameData {
   const imageUrl = game.cover?.url
@@ -113,5 +114,55 @@ export function transformRAWGGame(game: RAWGGame): ExtendedGameData {
     fullVideoUrl: null,
     previewVideoUrl: null,
     videoPreview: null,
+  }
+}
+
+// Helper function to check if cached game is fully populated
+export function isFullyPopulated(game: GameWithIncludes): boolean {
+  return Boolean(
+    game.description &&
+    game.mainImage &&
+    game.screenshots?.length > 0 &&
+    game.platforms?.length > 0 &&
+    game.genres?.length > 0 &&
+    game.companies?.length > 0 &&
+    game.gameStore?.length > 0 &&
+    game.supportedLanguages?.length > 0,
+  )
+}
+
+// Helper function to transform cached game to response format
+export function transformCachedGame(game: GameWithIncludes) {
+  return {
+    id: String(game.id),
+    title: game.title,
+    description: game.description || '',
+    mainImage: game.mainImage || '/placeholder.png',
+    screenshots: game.screenshots || [],
+    previewVideoUrl: game.previewVideoUrl,
+    fullVideoUrl: game.fullVideoUrl,
+    videoPreview: game.videoPreview,
+    releaseDate: game.releaseDate,
+    metacritic: game.metacritic || 0,
+    rating: game.rating,
+    ageRating: game.ageRating,
+    supportedLanguages: game.supportedLanguages,
+    systemRequirements: game.systemRequirements,
+    platforms: game.platforms.map(p => ({
+      name: p.platform.name,
+      slug: p.platform.slug,
+    })),
+    genres: game.genres.map(g => g.genre.name),
+    stores: game.gameStore.map(s => ({
+      name: s.store.name,
+      slug: s.store.slug,
+      icon: s.store.icon,
+      url: s.url,
+    })),
+    companies: game.companies.map(c => ({
+      name: c.company.name,
+      slug: c.company.slug,
+      role: c.role,
+    })),
   }
 }

@@ -11,7 +11,7 @@ export async function GET() {
     // Check cache first
     const cachedGames = await getCachedGames({
       limit: GAMES_LIMIT,
-      orderBy: { releaseDate: 'asc' },
+      orderBy: [{ releaseDate: 'asc' }],
       where: { releaseDate: { gte: new Date().toISOString() } },
     })
 

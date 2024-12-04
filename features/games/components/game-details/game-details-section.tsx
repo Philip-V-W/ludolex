@@ -88,14 +88,14 @@ export default function GameDetailsSection({ slug }: GameDetailsSectionProps) {
         </div>
 
         {/* TODO: fix tag fetching */}
-        <div>
-          <h3 className="fluid-max-18 font-semibold text-text-muted mb-2">
-            Tags:
-          </h3>
-          <p className="text-text-primary fluid-max-16 leading-relaxed">
-            {renderList(gameData.tags)}
-          </p>
-        </div>
+        {/*<div>*/}
+        {/*  <h3 className="fluid-max-18 font-semibold text-text-muted mb-2">*/}
+        {/*    Tags:*/}
+        {/*  </h3>*/}
+        {/*  <p className="text-text-primary fluid-max-16 leading-relaxed">*/}
+        {/*    {renderList(gameData.tags)}*/}
+        {/*  </p>*/}
+        {/*</div>*/}
       </div>
     </div>
   )

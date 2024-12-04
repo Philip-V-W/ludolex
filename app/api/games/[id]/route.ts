@@ -1,8 +1,9 @@
 import { type NextRequest } from 'next/server'
 import { NextResponse } from 'next/server'
-import { getGame } from '@/lib/api/games'
+import { getGameDetails } from '@/lib/api/games'
 import { stripHtml } from '@/lib/utils'
 import { getCachedGames, cacheGames } from '@/lib/api/services/cache'
+import { isFullyPopulated, transformCachedGame } from '@/features/games/utils/transformers'
 
 export async function GET(
   request: NextRequest,
@@ -21,51 +22,23 @@ export async function GET(
       limit: 1,
     })
 
-    // Return cached games if available
-    if (cachedGame) {
+    // Return cached games if available and fully populated
+    if (cachedGame && isFullyPopulated(cachedGame)) {
       return NextResponse.json({
         success: true,
-        data: {
-          id: String(cachedGame.id),
-          title: cachedGame.title,
-          description: stripHtml(cachedGame.description || ''),
-          mainImage: cachedGame.mainImage || '/placeholder.png',
-          screenshots: cachedGame.screenshots || [],
-          previewVideoUrl: cachedGame.previewVideoUrl,
-          fullVideoUrl: cachedGame.fullVideoUrl,
-          videoPreview: cachedGame.videoPreview,
-          releaseDate: cachedGame.releaseDate,
-          metacritic: cachedGame.metacritic || 0,
-          rating: cachedGame.rating,
-          ageRating: cachedGame.ageRating,
-          supportedLanguages: cachedGame.supportedLanguages,
-          systemRequirements: cachedGame.systemRequirements,
-          platforms: cachedGame.platforms.map(p => ({
-            name: p.platform.name,
-            slug: p.platform.slug,
-          })),
-          genres: cachedGame.genres.map(g => g.genre.name),
-          stores: cachedGame.gameStore.map(s => ({
-            name: s.store.name,
-            slug: s.store.slug,
-            icon: s.store.icon,
-            url: s.url,
-          })),
-          companies: cachedGame.companies.map(c => ({
-            name: c.company.name,
-            slug: c.company.slug,
-            role: c.role,
-          })),
-        },
+        data: transformCachedGame(cachedGame)
       })
     }
 
-    // Fetch fresh games and cache
-    const gameData = await getGame(slug)
+    // Fetch fresh data
+    const gameData = await getGameDetails(slug)
     if (!gameData) {
       return NextResponse.json(
-        { success: false, error: 'Game not found' },
-        { status: 500 },
+        {
+          success: false,
+          error: `Game not found: ${slug}`
+        },
+        { status: 404 }
       )
     }
 
@@ -73,42 +46,28 @@ export async function GET(
     const [cachedResult] = await cacheGames([gameData], stripHtml)
 
     if (!cachedResult) {
-      return NextResponse.json(
-        { success: false, error: 'Failed to cache game data' },
-        { status: 500 },
-      )
+      console.error('Failed to cache game data for:', slug)
+      // Still return the uncached data instead of failing
+      return NextResponse.json({
+        success: true,
+        data: gameData
+      })
     }
 
     return NextResponse.json({
       success: true,
-      data: {
-        id: String(cachedResult.id),
-        title: cachedResult.title,
-        description: stripHtml(cachedResult.description || ''),
-        mainImage: cachedResult.mainImage || '/placeholder.png',
-        screenshots: cachedResult.screenshots || [],
-        previewVideoUrl: cachedResult.previewVideoUrl,
-        fullVideoUrl: cachedResult.fullVideoUrl,
-        videoPreview: cachedResult.videoPreview,
-        platforms: cachedResult.platforms.map(p => ({
-          name: p.platform.name,
-          slug: p.platform.slug,
-        })),
-        genres: cachedResult.genres.map(g => g.genre.name),
-        metacritic: cachedResult.metacritic || 0,
-        stores: cachedResult.gameStore.map(s => ({
-          name: s.store.name,
-          slug: s.store.slug,
-          icon: s.store.icon,
-          url: s.url,
-        })),
-      },
+      data: transformCachedGame(cachedResult)
     })
+
   } catch (error) {
-    console.error('Error fetching game:', error)
+    console.error('Error in GET /api/games/[id]:', error)
     return NextResponse.json(
-      { success: false, error: 'Failed to fetch game' },
-      { status: 500 },
+      {
+        success: false,
+        error: 'Failed to fetch game data',
+        details: error instanceof Error ? error.message : 'Unknown error'
+      },
+      { status: 500 }
     )
   }
 }

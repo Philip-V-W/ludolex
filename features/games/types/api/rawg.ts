@@ -27,6 +27,7 @@ export interface RAWGGameStore {
 
 export interface RAWGGame {
   id: number
+  igdbId?: number | null
   slug: string
   name: string
   description?: string
@@ -60,5 +61,12 @@ export interface RAWGGame {
     slug: string
   }
   languages?: string[]
-  stores?: RAWGGameStore[]
+  stores?: {
+    url: string
+    store: {
+      id: number
+      name: string
+      slug: string
+    }
+  }[]
 }

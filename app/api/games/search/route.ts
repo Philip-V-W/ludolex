@@ -36,7 +36,6 @@ export async function GET(request: NextRequest) {
       success: true,
       data: cachedResults,
     })
-
   } catch (error) {
     console.error('Search error:', error)
     return NextResponse.json(
