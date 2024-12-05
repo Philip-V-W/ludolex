@@ -127,7 +127,12 @@ export function isFullyPopulated(game: GameWithIncludes): boolean {
     game.genres?.length > 0 &&
     game.companies?.length > 0 &&
     game.gameStore?.length > 0 &&
-    game.supportedLanguages?.length > 0,
+    game.supportedLanguages?.length > 0 &&
+    game.systemRequirements &&
+    game.metacritic &&
+    game.rating &&
+    game.ageRating &&
+    game.releaseDate
   )
 }
 

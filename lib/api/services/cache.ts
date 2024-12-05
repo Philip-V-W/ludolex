@@ -151,7 +151,7 @@ export async function cacheGames(
                 create: {
                   name: store.store.name,
                   slug: store.store.slug,
-                  icon: `/icons/stores/${store.store.slug}.svg`,
+                  icon: `/store_icons/${store.store.slug}.svg`,
                 },
               },
             },
