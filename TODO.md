@@ -16,6 +16,7 @@
 - [ ] adjust the horizontal scrollbar in the GameMediaSection component
 - [ ] fix the GameMediaCarousel drag scroll
 - [ ] most anticipated game cards have a slight gap at the bottom
+- [ ] game media carousel is showing the 1st image twice
 
 ## Future Improvements
 

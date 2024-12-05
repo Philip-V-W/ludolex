@@ -1,10 +1,9 @@
-import React from 'react'
+import React, { useState } from 'react'
 import Link from 'next/link'
 import Image from 'next/image'
 import { ScrollArea } from '@/components/ui/scroll-area'
 import { useSearchStore } from '@/features/games/stores/searchStore'
 
-// Absolute image URLs helper
 const ensureAbsoluteUrl = (url: string) => {
   if (url.startsWith('//')) {
     return `https:${url}`
@@ -14,8 +13,11 @@ const ensureAbsoluteUrl = (url: string) => {
 
 export const SearchResults = () => {
   const { results, isLoading, isOpen, error, clearSearch } = useSearchStore()
+  const [showAll, setShowAll] = useState(false)
 
   if (!isOpen) return null
+
+  const displayedResults = showAll ? results : results.slice(0, 5)
 
   return (
     <div className="absolute left-0 right-0 top-full z-50 mt-2 rounded-lg bg-bg-nav p-2 shadow-lg">
@@ -28,7 +30,7 @@ export const SearchResults = () => {
           <div className="p-4 text-center text-text-secondary">No results found</div>
         ) : (
           <div className="flex flex-col gap-2">
-            {results.map((game) => (
+            {displayedResults.map((game) => (
               <Link
                 key={game.id}
                 href={`/games/${game.slug}`}
@@ -60,6 +62,15 @@ export const SearchResults = () => {
                 </div>
               </Link>
             ))}
+
+            {results.length > 5 && !showAll && (
+              <button
+                onClick={() => setShowAll(true)}
+                className="mt-2 w-full rounded-md bg-bg-secondary p-2 text-center text-sm text-text-primary hover:bg-bg-secondary/80 transition-colors"
+              >
+                Show All Results ({results.length})
+              </button>
+            )}
           </div>
         )}
       </ScrollArea>
