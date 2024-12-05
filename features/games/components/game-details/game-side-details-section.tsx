@@ -15,6 +15,7 @@ interface GameSideData {
     releaseDate: string | null
     ageRating: number | null
     supportedLanguages: string[]
+    metacritic: number
     stores: {
       name: string
       slug: string
@@ -65,7 +66,6 @@ export default function GameSideDetails({ slug }: GameSideDetailsProps) {
   const developers = data.companies?.filter(c => c.role === 'DEVELOPER') || []
   const publishers = data.companies?.filter(c => c.role === 'PUBLISHER') || []
   const portDevelopers = data.companies?.filter(c => c.role === 'PORT_DEVELOPER') || []
-  console.log('developers:', developers, 'publishers:', publishers, 'portDevelopers:', portDevelopers)
 
   return (
     <div className="space-y-6 bg-bg-nav p-6 rounded-xl">
@@ -120,6 +120,32 @@ export default function GameSideDetails({ slug }: GameSideDetailsProps) {
         </section>
       )}
 
+      {/* Score Bar */}
+      {data.metacritic > 0 && (
+        <section>
+          <h3 className="fluid-max-18 font-semibold text-text-primary mb-2">
+            Score
+          </h3>
+          <div className="mt-[5%]">
+            <div className="flex h-[0.4cqw] w-full overflow-hidden rounded-full gap-1.5">
+              {/* Positive segment */}
+              <div
+                className="h-full bg-rating-success transition-all"
+                style={{ width: `${data.metacritic}%` }}
+              />
+              {/* Negative segment */}
+              <div
+                className="h-full bg-rating-error transition-all"
+                style={{ width: `${Math.max(0, 100 - data.metacritic)}%` }}
+              />
+            </div>
+          </div>
+          <div className="flex justify-between text-sm text-text-primary mt-2">
+            <span>{data.metacritic}% Positive</span>
+            <span>{Math.max(0, 100 - data.metacritic - 10)}% Negative</span>
+          </div>
+        </section>
+      )}
 
       {/* Age Rating */}
       {data.ageRating && (
@@ -132,7 +158,6 @@ export default function GameSideDetails({ slug }: GameSideDetailsProps) {
           </div>
         </section>
       )}
-
 
       {/* Stores */}
       {data.stores.length > 0 && (

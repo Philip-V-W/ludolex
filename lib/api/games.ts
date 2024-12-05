@@ -116,6 +116,7 @@ export async function getTopRatedGames(): Promise<ExtendedGameData[]> {
       ordering: '-metacritic',
       page_size: '20',
       metacritic: '90,100',
+      dates: '2010-01-01,2099-12-31',
     },
   })
 }
@@ -139,7 +140,7 @@ export async function getRecommendedGames(): Promise<ExtendedGameData[]> {
       ordering: '-metacritic,-rating,-added',
       platforms: '1,2,3,4,5,6,7,8,14,80,83,169,186,187',
       page_size: '40',
-      dates: '2000-01-01,2024-12-31',
+      dates: '2000-01-01,2099-12-31',
     },
   })
 }

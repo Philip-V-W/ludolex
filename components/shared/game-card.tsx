@@ -121,16 +121,19 @@ const GameCard = ({
 
           {/* Score Bar */}
           {score && (
-            <div className="h-[0.4cqw] w-full overflow-hidden rounded-full bg-accent-primary mt-[4%]">
-              <div
-                className={cn(
-                  'h-full transition-all',
-                  score >= 80 ? 'bg-rating-success' :
-                    score >= 60 ? 'bg-rating-warning' :
-                      'bg-rating-error',
-                )}
-                style={{ width: `${score}%` }}
-              />
+            <div className="mt-[4%]">
+              <div className="flex h-[0.4cqw] w-full overflow-hidden rounded-full gap-1.5">
+                {/* Positive segment */}
+                <div
+                  className="h-full bg-rating-success transition-all"
+                  style={{ width: `${score}%` }}
+                />
+                {/* Negative segment */}
+                <div
+                  className="h-full bg-rating-error transition-all"
+                  style={{ width: `${Math.max(0, 100 - score)}%` }}
+                />
+              </div>
             </div>
           )}
         </div>

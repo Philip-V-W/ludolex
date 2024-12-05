@@ -24,6 +24,7 @@
 - [ ] implement NSFW filter
 - [ ] get more platform icons
 - [ ] implement store redirections
+- [ ] mixed scorebar value not implemented, unsure if it's even possible to get this data
 
 ## Notes
 

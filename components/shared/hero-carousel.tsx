@@ -183,10 +183,16 @@ const GameSlide: React.FC<{ game: CarouselGame }> = ({ game }) => {
 
             {/* Score Bar */}
             <div className="mt-[5%]">
-              <div className="h-[0.4cqw] w-full rounded-full bg-accent-primary">
+              <div className="flex h-[0.4cqw] w-full overflow-hidden rounded-full gap-1.5">
+                {/* Positive segment */}
                 <div
-                  className="h-full rounded-full bg-rating-success transition-all"
+                  className="h-full bg-rating-success transition-all"
                   style={{ width: `${game.score}%` }}
+                />
+                {/* Negative segment */}
+                <div
+                  className="h-full bg-rating-error transition-all"
+                  style={{ width: `${Math.max(0, 100 - game.score)}%` }}
                 />
               </div>
             </div>
