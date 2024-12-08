@@ -28,10 +28,12 @@ export default async function GamePage({ params }: GamePageProps) {
   return (
     <div className="min-w-0">
       <GameMediaSection slug={params.slug} />
-      <div className="mt-6 grid grid-cols-1 gap-6 lg:grid-cols-[2.5fr,1fr]">
-        <GameDetailsSection slug={params.slug} />
+      <div className="mt-6 grid grid-cols-1 gap-6 lg:grid-cols-[2fr,1fr]">
+        <div className="space-y-6">
+          <GameDetailsSection slug={params.slug} />
+          <GameReqDetails slug={params.slug} />
+        </div>
         <GameSideDetails slug={params.slug} />
-        <GameReqDetails slug={params.slug} />
       </div>
     </div>
   )

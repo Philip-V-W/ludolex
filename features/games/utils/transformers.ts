@@ -68,7 +68,6 @@ export function transformRAWGGame(game: RAWGGame): ExtendedGameData {
     },
   })) || []
 
-  // Transform platforms with requirements
   const platforms = game.platforms?.map(p => ({
     name: p.platform.name,
     slug: p.platform.slug,

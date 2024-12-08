@@ -6,11 +6,6 @@ export interface CompanyData {
   role: CompanyRole
 }
 
-export interface GamesListOptions {
-  params: Record<string, string>
-  includeDetails?: boolean
-}
-
 export interface BaseGame {
   id: string
   title: string

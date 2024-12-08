@@ -1,8 +1,8 @@
 import { igdbClient } from './igdb'
 import { rawgClient } from './rawg'
-import { IGDBGame, RAWGGame, RAWGGameDetails, RAWGResponse } from '@/features/games/types'
+import { IGDBGame, RAWGGame, RAWGGameDetails, RAWGResponse, GamesListOptions } from '@/features/games/types'
 import { transformIGDBGame, transformRAWGGame } from '@/features/games/utils/transformers'
-import { CompanyData, ExtendedGameData, GamesListOptions } from '@/features/games/types/api/games'
+import { CompanyData, ExtendedGameData } from '@/features/games/types/api/games'
 import { CompanyRole } from '@prisma/client'
 
 export async function searchGames(query: string): Promise<ExtendedGameData[]> {
@@ -215,7 +215,7 @@ export async function getGameDetails(identifier: string | number): Promise<Exten
       return null
     }
 
-    // Now that we have the game, fetch additional data in parallel
+    // Fetch additional data in parallel
     const [screenshots, igdbData] = await Promise.all([
       // Get screenshots
       rawgClient.fetch<{ results: { image: string }[] }>(`games/${rawgGame.id}/screenshots`)

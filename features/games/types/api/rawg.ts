@@ -7,6 +7,11 @@ export interface RAWGGameDetails extends RAWGGame {
   requirements?: SystemRequirements
 }
 
+export interface GamesListOptions {
+  params: Record<string, string>
+  includeDetails?: boolean
+}
+
 export interface RAWGResponse<T> {
   count: number
   next: string | null
