@@ -59,7 +59,7 @@ A modern video game database application built with Next.js 14, TypeScript, and 
 
 3. Set up environment variables:
    ```bash
-   cp .env.example .env.local
+   cp .env.example .env
    ```
 
 4. Set up PostgreSQL database:
